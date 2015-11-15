@@ -96,7 +96,7 @@ module.exports = function(grunt) {
 	grunt.initConfig(config);
 
 	require('load-grunt-tasks')(grunt);
-	grunt.loadTasks('tasks');
+	grunt.loadTasks('builder/tasks');
 
 
 	// Default task(s).

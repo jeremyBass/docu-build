@@ -3,7 +3,7 @@
 		"google_analytics":"UA-XXXXXXXX-XX"
 	},
 	"page_defaults":{
-		"root":"../site/",
+		"root":"site/",
 		"nav_root":"site/",
 		"template":"main"
 	},

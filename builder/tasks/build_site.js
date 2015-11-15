@@ -42,7 +42,7 @@ module.exports = function(grunt) {
 		var wrench = require('wrench'),
 			util = require('util');
 
-		sitemap = grunt.file.readJSON('../sitemap.json');
+		sitemap = grunt.file.readJSON('/src/sitemap.json');
 		var defaults = sitemap.page_defaults;
 		
 		
@@ -115,7 +115,7 @@ module.exports = function(grunt) {
 
 				var site_obj = sitemap;
 				var page_obj = site_obj.pages[key];
-				var sourceFile = 'templates/'+page_obj.template+'.tmpl';
+				var sourceFile = 'builder/templates/'+page_obj.template+'.tmpl';
 				//var tmpFile = 'build/deletable.tmp';
 				var root = page_obj.root.replace(new RegExp("[\/]+$", "g"), "");
 				
