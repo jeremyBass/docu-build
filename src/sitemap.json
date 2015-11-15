@@ -11,48 +11,10 @@
 		"index":{
 			"name":"index",
 			"nav_link":"",
-			"root":"../",
-			"title":"Theme Controller",
+			"root":"./",
+			"title":"Main default",
 			"vars":{
 				"showstuff":true
-			}
-		},
-		"installation":{
-			"name":"installation",
-			"title":"Installing the WSU Magneto Theme Controller",
-			"nav_title":"Installing",
-			"vars":{
-				"showstuff":true
-			},
-			"child_nav":{
-				"#installation-with-gitploy":"Gitploy install",
-				"#setting-the-package":"Activate the Package",
-				"#setting-a-child-theme":"Set child theme"
-			}
-		},
-		"design":{
-			"name":"design",
-			"title":"Altering the design WSU Magneto Theme Controller",
-			"nav_title":"Design",
-			"vars":{
-				"showstuff":true
-			},
-			"child_nav":{
-				"#wsu-spine-framework":"WSU Spine framework",
-				"#css-override":"CSS Override"
-			}
-		},
-		"layout":{
-			"name":"layout",
-			"title":"Altering the layout WSU Magneto Theme Controller",
-			"nav_title":"Layout",
-			"vars":{
-				"showstuff":true
-			},
-			"child_nav":{
-				"#spine-responsive-layout-options":"Responsive layout",
-				"#spine-layout-options":"Spine layout options",
-				"#dyno-layout-template-set":"Dynamic Layouts"
 			}
 		}
 	}

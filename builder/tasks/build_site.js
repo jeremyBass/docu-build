@@ -1,5 +1,11 @@
 module.exports = function(grunt) {
 	grunt.registerTask('build_site', 'Set up all pages', function() {
+		
+		var exec = require('child_process').exec;
+		var path = require('path');
+		var cwd = process.cwd();
+		var parentDir = path.resolve(process.cwd(), '..');
+		
 		function cmd_exec(cmd, args, cb_stdout, cb_end) {
 			var spawn = require('child_process').spawn,
 				child = spawn(cmd, args),
@@ -11,7 +17,7 @@ module.exports = function(grunt) {
 		
 		var nunjucks = require('nunjucks'),
 			markdown = require('nunjucks-markdown');
-		var env = nunjucks.configure('templates');
+		var env = nunjucks.configure('builder');
 		env.addFilter('indexof', function(str, cmpstr) {
 			return str.indexOf(cmpstr);
 		});
@@ -42,7 +48,7 @@ module.exports = function(grunt) {
 		var wrench = require('wrench'),
 			util = require('util');
 
-		sitemap = grunt.file.readJSON('/src/sitemap.json');
+		sitemap = grunt.file.readJSON('src/sitemap.json');
 		var defaults = sitemap.page_defaults;
 		
 		
@@ -115,6 +121,7 @@ module.exports = function(grunt) {
 
 				var site_obj = sitemap;
 				var page_obj = site_obj.pages[key];
+				grunt.log.writeln(cwd);
 				var sourceFile = 'builder/templates/'+page_obj.template+'.tmpl';
 				//var tmpFile = 'build/deletable.tmp';
 				var root = page_obj.root.replace(new RegExp("[\/]+$", "g"), "");
@@ -122,7 +129,7 @@ module.exports = function(grunt) {
 				var page = page_obj.nav_key+".html";
 				var targetFile = root+'/'+page;
 				var content = fs.readFileSync(sourceFile,'utf8')
-				
+				content = content.split('{% include "').join('{% include "templates/');
 				site_obj.current_page=page;
 				site_obj.current_build=page_obj.nav_key;
 				grunt.log.writeln("building "+targetFile);
@@ -137,52 +144,6 @@ module.exports = function(grunt) {
 			}
 		}
 		build_page();
-		
-		
-		
-		
-		/*
-		var page_vars = {
-			"ip": ip,
-			"branch": "master",
-			"owner": "washingtonstateuniversity",
-			"box": "hansode/centos-6.5-x86_64",
-			"box_url": false,
-			"hostname": "general_server",
-			"memory": "1024",
-			"vram": "8",
-			"cores": "1",
-			"host_64bit": "false",
-			"verbose_output": "true",
-			"gui":"false"
-		};
-		serverobj = grunt.file.readJSON('server_project.conf');
-		var servers = serverobj.servers;
-		//set up the vagrant object so that we can just define the server if we want to
-		//the vagrant needs some defaults, and so it's vagrant default then remote then 
-		//vagrant opptions
-		for (var key in servers) {
-			grunt.log.writeln("found server "+key);
-			var server = servers[key];
-			server.vagrant = extend(default_vagrant,server.remote,server.vagrant||{});
-			grunt.log.writeln("extenting server "+key);
-			servers[key]=server;
-		}
-		serverobj.servers = servers;
-
-
-		var sourceFile = 'tasks/jigs/vagrant/Vagrantfile';
-		var tmpFile = 'tasks/jigs/vagrant/Vagrantfile.tmp';
-		var targetFile = 'Vagrantfile';
-		var content = fs.readFileSync(sourceFile,'utf8')
-
-		grunt.log.writeln("read file");
-		grunt.log.writeln("renderString of file");
-		var tmpl = new nunjucks.Template(content);
-		grunt.log.writeln("compile");
-		var res = tmpl.render(serverobj);
-		grunt.log.writeln("renderd");
-*/
 
 		grunt.task.current.async();
 	});

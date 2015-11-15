@@ -64,28 +64,10 @@ module.exports = function(grunt) {
 			},
 			index : {
 				src : 'src/index.html',
-				dest : 'build/index.html',
+				dest : 'builder/build/index.html',
 				options : {
 					context : {
 						page : 'index'
-					}
-				}
-			},
-			production : {
-				src : 'src/index.html',
-				dest : 'build/production.html',
-				options : {
-					context : {
-						page : 'production'
-					}
-				}
-			},
-			development : {
-				src : 'src/index.html',
-				dest : 'build/development.html',
-				options : {
-					context : {
-						page : 'development'
 					}
 				}
 			},
