@@ -1,18 +1,18 @@
-{% markdown %}
+
 <!-- CONTACT INFO: Adjust the sample contact info below to reflect appropriate contact information. -->
 <div id="contact-details" itemscope itemtype="http://schema.org/Organization"> 
-	<span itemprop="department"  content="University Communications"></span> 
-	<span itemprop="name" content="Washington State University"></span> 
+	<span itemprop="department"  content="{{ globals.contact.department }}"></span> 
+	<span itemprop="name" content="{{ globals.contact.name }}"></span> 
 	<div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
-		<span itemprop="location" content="ITB"></span>
-		<span itemprop="streetAddress" content="ITB"></span>
-		<span itemprop="addressLocality" content="Pullman"></span>
-		<span itemprop="addressRegion" content="WA"></span>
-		<span itemprop="postalCode" content="99164"></span>
+		<span itemprop="location" content="{{ globals.contact.location }}"></span>
+		<span itemprop="streetAddress" content="{{ globals.contact.streetAddress }}"></span>
+		<span itemprop="addressLocality" content="{{ globals.contact.addressLocality }}"></span>
+		<span itemprop="addressRegion" content="{{ globals.contact.addressRegion }}"></span>
+		<span itemprop="postalCode" content="{{ globals.contact.postalCode }}"></span>
 	</div>
-	<span itemprop="telephone" content="(509) 335-2700"></span>
-	<span itemprop="email" content="web.support@wsu.edu"></span>
-	<span itemprop="contactPoint" content="https://ucomm.wsu.edu/contact/"></span>
-	<span itemprop="url" content="https://github.com/washingtonstateuniversity"></span>
+	<span itemprop="telephone" content="{{ globals.contact.telephone }}"></span>
+	<span itemprop="email" content="{{ globals.contact.email }}"></span>
+	<span itemprop="contactPoint" content="{{ globals.contact.contactPoint }}"></span>
+	<span itemprop="url" content="{{ globals.contact.url }}"></span>
 </div>
-{% endmarkdown %}
+

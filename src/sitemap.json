@@ -1,6 +1,19 @@
 {
 	"globals":{
-		"google_analytics":"UA-XXXXXXXX-XX"
+		"google_analytics":"UA-XXXXXXXX-XX",
+		"contact":{
+			"department":"University Communications",
+			"name":"Washington State University",
+			"location":"ITB",
+			"streetAddress":"ITB",
+			"addressLocality":"Pullman",
+			"addressRegion":"WA",
+			"postalCode":"99164",
+			"telephone":"(509) 335-2700",
+			"email":"web.support@wsu.edu",
+			"contactPoint":"https://ucomm.wsu.edu/contact/",
+			"url":"https://github.com/washingtonstateuniversity"
+		}
 	},
 	"page_defaults":{
 		"root":"site/",
