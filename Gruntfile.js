@@ -41,17 +41,23 @@ module.exports = function(grunt) {
 		copy: {
 			main: {
 				files: [
-					{expand: true,flatten: true, src: ['pub/build/*.html'], dest: '../site/'},
-					{expand: true,flatten: true, src: ['pub/build/index.html'], dest: '../'}
+					{expand: true,flatten: true, src: ['builder/pub/build/*.html'], dest: 'site/'},
+					{expand: true,flatten: true, src: ['builder/pub/build/index.html'], dest: ''}
+				]
+			},
+			defaults: {
+				files: [
+					{expand: true,flatten:false, src: ['builder/templates/assests'], dest: 'site/assests/'},
+					{expand: true,flatten: true, src: ['builder/pub/build/index.html'], dest: ''}
 				]
 			}
 		},
 		includereplace: {
 			prep: {
 				// Files to perform replacements and includes with
-				src: 'build/*.html',
+				src: 'builder/build/*.html',
 				// Destination directory to copy files to
-				dest: 'pub/'
+				dest: 'builder/pub/'
 			},
 		},
 		preprocess : {

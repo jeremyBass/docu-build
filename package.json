@@ -23,6 +23,7 @@
 		"glob": "~6.0.1",
 		"deepmerge ":"~0.2.10",
 		"extend":"~3.0.0",
+		"fs-extra":"~0.26.2",
 		"wrench":"~1.5.8",
 		"nunjucks":"~2.1.0",
 		"marked":"~0.3.5",

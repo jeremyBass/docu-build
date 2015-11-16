@@ -44,6 +44,7 @@ module.exports = function(grunt) {
 		
 		
 		var fs = require('fs');
+		var fsx = require('fs-extra');
 		var extend = require('extend');
 		var wrench = require('wrench'),
 			util = require('util');
@@ -51,6 +52,20 @@ module.exports = function(grunt) {
 		sitemap = grunt.file.readJSON('src/sitemap.json');
 		var defaults = sitemap.page_defaults;
 		
+		/*
+		 * set up folders and defaults
+		 */
+		function create_structure(){
+			wrench.mkdirSyncRecursive('site/assests', 0777);
+			fsx.copy('builder/templates/assests', 'site/assests', function (err) {
+			  if (err) {
+				grunt.log.writeln(err);
+			  } else {
+				grunt.log.writeln("copied defaults and is ready to recive the overrides");
+			  }
+			}); 
+		}
+		create_structure();
 		
 		/*
 		 * This will apply defaults and build the nav
