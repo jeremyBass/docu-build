@@ -1,5 +1,9 @@
 {
 	"globals":{
+		"repo":{
+			"name":"docu-build",
+			"owner":"jeremyBass"
+		}
 		"google_analytics":"UA-XXXXXXXX-XX",
 		"contact":{
 			"department":"University Communications",
