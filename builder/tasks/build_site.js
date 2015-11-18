@@ -51,7 +51,10 @@ module.exports = function(grunt) {
 		var extend = require('extend');
 		var wrench = require('wrench'),
 			util = require('util');
+		//clear all of the site first thing and start fresh
+		fsx.removeSync('./site');
 
+		//read the setting and load as an object
 		var sitemap = grunt.file.readJSON('src/sitemap.json');
 		
 		// overwrite : templates/blocks/* => src/blocks/*
@@ -105,24 +108,35 @@ module.exports = function(grunt) {
 			wrench.mkdirSyncRecursive('site/'+folders.assests, 0777);
 			
 			//do defaults first
-			fsx.copy('builder/'+folders.templates+folders.assests, 'site/'+folders.assests+'/', function (err) {
-			  if (err) {
-				grunt.log.writeln(err);
-			  } else {
-				grunt.log.writeln(resolve_path(folders.assests));
-				grunt.log.writeln("copied defaults and is ready to recive the overrides");
-			  }
+			fsx.copy('builder/'+folders.templates+folders.assests, 'site/'+folders.assests, {"clobber" :true}, function (err) {
+				if (err) return grunt.log.writeln(err);
+
+				var items = []; // files, directories, symlinks, etc
+				fsx.walk('src/'+folders.assests)
+				.on('readable', function () {
+					var item;
+					while ((item = this.read())) {
+						var _path = (item.path).split('src\\'+(folders.assests.split("/").join("\\"))).join("site\\"+folders.assests.split("/").join("\\"));
+						try {
+							if(fs.statSync(_path).isFile()){
+								fsx.removeSync(_path);
+								fsx.copy(item.path, _path, function (err) {
+									if (err) return grunt.log.writeln(err);
+								});
+								items.push(_path);
+							}
+						}
+						catch (err) {
+							grunt.log.writeln(err);
+						}
+					}
+				})
+				.on('end', function () {
+					//grunt.log.writeln(items); // => [ ... array of files]
+				});
+			
 			}); 
 			
-			//check for overrides
-			fsx.copy(resolve_path(folders.assests), 'site/'+folders.assests, function (err) {
-			  if (err) {
-				grunt.log.writeln(err);
-			  } else {
-				  grunt.log.writeln(resolve_path(folders.assests));
-				grunt.log.writeln("found some overrides and applied them");
-			  }
-			}); 
 		}
 		create_structure();
 		
@@ -221,8 +235,6 @@ module.exports = function(grunt) {
 						page_path = _path.split('"+current_build+"').join(page_obj.nav_key);
 					}
 					var _resoled = resolve_path(false!==page_path?page_path:_path);
-					grunt.log.writeln((false!==page_path?page_path:_path)+"<<<< LOOKING FOR THIS PATH HERE <<<<<<<<<<<<<<");
-					grunt.log.writeln(_resoled+"<<<< found <<<<---------------<<<<<<<<<<");
 					if( false !== _resoled){
 						content = content.split('{% include "'+_path+'" -%}').join('{% include "'+_resoled+'" -%}');
 					}
