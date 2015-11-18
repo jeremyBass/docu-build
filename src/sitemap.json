@@ -3,7 +3,7 @@
 		"repo":{
 			"name":"docu-build",
 			"owner":"jeremyBass"
-		}
+		},
 		"google_analytics":"UA-XXXXXXXX-XX",
 		"contact":{
 			"department":"University Communications",
@@ -22,7 +22,17 @@
 	"page_defaults":{
 		"root":"site/",
 		"nav_root":"site/",
-		"template":"main"
+		"template":"main.tmpl",
+		"content_folders": {
+			"assests":"assests/",
+			"js":"js/",
+			"css":"css/",
+			"img":"img/",
+			"pages":"pages/",
+			"templates":"templates/",
+			"blocks":"blocks/",
+			"template":"main.tmpl"
+		}
 	},
 	"pages":{
 		"index":{

@@ -1,9 +1,11 @@
 {% markdown %}
 ## Download this project
-
-* [View On GitHub](https://github.com/washingtonstateuniversity/WSUMAGE-theme-base)
-* [Download ZIP](https://github.com/washingtonstateuniversity/WSUMAGE-theme-base/zipball/master)
-* [Download TAR](https://github.com/washingtonstateuniversityWSUMAGE-theme-base/tarball/master)
-
-This project is maintained by [Washington State University](https://github.com/washingtonstateuniversity).  If you have found an issue please report it in the [repo issue list](https://github.com/washingtonstateuniversity/WSUMAGE-theme-base/issues).  
 {% endmarkdown %}
+<ul>
+	<li> <a href="https://github.com/{{ globals.repo.owner }}/{{ globals.repo.name }}">View On GitHub</a> </li>
+	<li> <a href="https://github.com/{{ globals.repo.owner }}/{{ globals.repo.name }}/zipball/master">Download ZIP</a> </li>
+	<li> <a href="https://github.com/{{ globals.repo.owner }}/{{ globals.repo.name }}/tarball/master">Download TAR</a> </li>
+</ul>
+
+<p>This project is maintained by <a href="https://github.com/{{ globals.repo.owner }}">{{ globals.repo.owner }}</a>.  If you have found an issue please report it in the <a href="https://github.com/{{ globals.repo.owner }}/{{ globals.repo.name }}/issues">repo issue list</a>.  </p>
+

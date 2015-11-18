@@ -6,6 +6,9 @@ module.exports = function(grunt) {
 		var cwd = process.cwd();
 		var parentDir = path.resolve(process.cwd(), '..');
 		
+
+		
+		
 		function cmd_exec(cmd, args, cb_stdout, cb_end) {
 			var spawn = require('child_process').spawn,
 				child = spawn(cmd, args),
@@ -17,7 +20,7 @@ module.exports = function(grunt) {
 		
 		var nunjucks = require('nunjucks'),
 			markdown = require('nunjucks-markdown');
-		var env = nunjucks.configure('builder');
+		var env = nunjucks.configure('./');
 		env.addFilter('indexof', function(str, cmpstr) {
 			return str.indexOf(cmpstr);
 		});
@@ -49,18 +52,74 @@ module.exports = function(grunt) {
 		var wrench = require('wrench'),
 			util = require('util');
 
-		sitemap = grunt.file.readJSON('src/sitemap.json');
-		var defaults = sitemap.page_defaults;
+		var sitemap = grunt.file.readJSON('src/sitemap.json');
 		
+		// overwrite : templates/blocks/* => src/blocks/*
+		// overwrite : templates/assests/* => src/assests/*
+		// overwrite : templates/pages/* => src/page/*
+		// overwrite : templates/main.tmpl => src/main.tmpl
+		var content_folders = {
+			"assests":"assests/",
+				"js":"js/",
+				"css":"css/",
+				"img":"img/",
+			"pages":"pages/",
+			"blocks":"blocks/",
+			"templates":"templates/",
+			"template":"main.tmpl",
+		};
+		if( "undefined" === sitemap.page_defaults.content_folders ){
+			sitemap.page_defaults.content_folders = {};
+		}
+		for (var item in content_folders){
+			if( "undefined" === sitemap.page_defaults.content_folders[item] ){
+				sitemap.page_defaults.content_folders[item] = content_folders[item];
+			}
+		}
+		
+		var defaults = sitemap.page_defaults;
+		var folders = defaults.content_folders;
+
+		/*
+		 * set up folders and file paths based on the sitemap with fallbacks to the builder template folder
+		 */
+		function resolve_path(relative_path,tested){
+			tested = tested||false;
+			var _path = "src/" + relative_path;
+			if( true === tested ){
+				_path = "builder/" + folders.templates +""+ relative_path;
+			}
+			try {
+				var pass_test = fs.statSync(_path).isFile()||fs.statSync(_path).isDirectory();
+				return pass_test ? _path : (tested ? false : resolve_path(relative_path,true));
+			}
+			catch (err) {
+				return tested ? false : resolve_path(relative_path,true);
+			}
+		}
+
 		/*
 		 * set up folders and defaults
 		 */
 		function create_structure(){
-			wrench.mkdirSyncRecursive('site/assests', 0777);
-			fsx.copy('builder/templates/assests', 'site/assests', function (err) {
+			wrench.mkdirSyncRecursive('site/'+folders.assests, 0777);
+			
+			//do defaults first
+			fsx.copy('builder/'+folders.templates+folders.assests, 'site/'+folders.assests+'/', function (err) {
 			  if (err) {
 				grunt.log.writeln(err);
 			  } else {
+				  grunt.log.writeln(resolve_path(folders.assests));
+				grunt.log.writeln("copied defaults and is ready to recive the overrides");
+			  }
+			}); 
+			
+			//check for overrides
+			fsx.copy(resolve_path(folders.assests), 'site/'+folders.assests, function (err) {
+			  if (err) {
+				grunt.log.writeln(err);
+			  } else {
+				  grunt.log.writeln(resolve_path(folders.assests));
 				grunt.log.writeln("copied defaults and is ready to recive the overrides");
 			  }
 			}); 
@@ -74,7 +133,7 @@ module.exports = function(grunt) {
 			var nav = {};
 			for (var page_key in sitemap.pages) {
 				grunt.log.writeln("working "+page_key);
-				
+
 				//apply defaults were needed
 				sitemap.pages[page_key].nav_key = page_key;
 				//note extend will not work here, for some reason it'll alter the ref of defaults
@@ -137,14 +196,38 @@ module.exports = function(grunt) {
 				var site_obj = sitemap;
 				var page_obj = site_obj.pages[key];
 				grunt.log.writeln(cwd);
-				var sourceFile = 'builder/templates/'+page_obj.template+'.tmpl';
+				grunt.log.writeln(folders.template+"<<<---folders.template");
+				var sourceFile = resolve_path(folders.template);
+				grunt.log.writeln(sourceFile+"<<<---sourceFile");
+				
+				
 				//var tmpFile = 'build/deletable.tmp';
 				var root = page_obj.root.replace(new RegExp("[\/]+$", "g"), "");
 				
 				var page = page_obj.nav_key+".html";
 				var targetFile = root+'/'+page;
-				var content = fs.readFileSync(sourceFile,'utf8')
-				content = content.split('{% include "').join('{% include "templates/');
+				var content = fs.readFileSync(sourceFile,'utf8');
+				
+				//check for the need to use a fall back if it exists
+				var re = /(?:{% include ")(.*?)(?:" -%})/gmi;
+				var m;
+				while ((m = re.exec(content)) !== null) {
+					if (m.index === re.lastIndex) {
+						re.lastIndex++;
+					}
+					var _path = m[1];
+					var page_path = false;
+					if(_path.indexOf('"+current_build+"')>0){
+						page_path = _path.split('"+current_build+"').join(page_obj.nav_key);
+					}
+					var _resoled = resolve_path(false!==page_path?page_path:_path);
+					grunt.log.writeln((false!==page_path?page_path:_path)+"<<<< LOOKING FOR THIS PATH HERE <<<<<<<<<<<<<<");
+					grunt.log.writeln(_resoled+"<<<< found <<<<---------------<<<<<<<<<<");
+					if( false !== _resoled){
+						content = content.split('{% include "'+_path+'" -%}').join('{% include "'+_resoled+'" -%}');
+					}
+				}
+				
 				site_obj.current_page=page;
 				site_obj.current_build=page_obj.nav_key;
 				grunt.log.writeln("building "+targetFile);
@@ -155,7 +238,6 @@ module.exports = function(grunt) {
 				fs.writeFile(targetFile, res, function(err){
 					grunt.log.writeln("wrote to file "+targetFile);
 				});
-
 			}
 		}
 		build_page();

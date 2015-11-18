@@ -1,7 +1,7 @@
+<h1>WSU Docu Builder</h1>
+<h2>Repo : <a href="https://github.com/{{ globals.repo.owner }}/{{ globals.repo.name }}">View On GitHub</a></h2>
+
 {% markdown %}
-# WSU Docu Builder
-## Repo : [docu-build](https://github.com/jeremyBass/docu-build)
-    
 <div class="row halves"><div class="column">
 
 ###Default Foo Content!!!
