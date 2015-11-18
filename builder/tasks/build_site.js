@@ -109,7 +109,7 @@ module.exports = function(grunt) {
 			  if (err) {
 				grunt.log.writeln(err);
 			  } else {
-				  grunt.log.writeln(resolve_path(folders.assests));
+				grunt.log.writeln(resolve_path(folders.assests));
 				grunt.log.writeln("copied defaults and is ready to recive the overrides");
 			  }
 			}); 
@@ -120,7 +120,7 @@ module.exports = function(grunt) {
 				grunt.log.writeln(err);
 			  } else {
 				  grunt.log.writeln(resolve_path(folders.assests));
-				grunt.log.writeln("copied defaults and is ready to recive the overrides");
+				grunt.log.writeln("found some overrides and applied them");
 			  }
 			}); 
 		}
