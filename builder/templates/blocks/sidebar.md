@@ -2,7 +2,7 @@
 ## Download this project
 {% endmarkdown %}
 <ul>
-	<li> <a href="https://github.com/{{ globals.repo.owner }}/{{ globals.repo.name }}">View On GitHub</a> </li>
+	<li> <a id="repo_github_link" href="https://github.com/{{ globals.repo.owner }}/{{ globals.repo.name }}">View On GitHub</a> </li>
 	<li> <a href="https://github.com/{{ globals.repo.owner }}/{{ globals.repo.name }}/zipball/master">Download ZIP</a> </li>
 	<li> <a href="https://github.com/{{ globals.repo.owner }}/{{ globals.repo.name }}/tarball/master">Download TAR</a> </li>
 </ul>

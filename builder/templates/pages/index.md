@@ -1,10 +1,10 @@
 <h1>WSU Docu Builder</h1>
-<h2>Repo : <a href="https://github.com/{{ globals.repo.owner }}/{{ globals.repo.name }}">View On GitHub</a></h2>
+<h2 id="repo_github_header">Repo : <a href="https://github.com/{{ globals.repo.owner }}/{{ globals.repo.name }}">View On GitHub</a></h2>
 
 {% markdown %}
 <div class="row halves"><div class="column">
 
-###Default Foo Content!!!
+### Default Foo Content!!!
 
 </div><div class="column">
 
