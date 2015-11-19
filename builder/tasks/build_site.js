@@ -134,7 +134,7 @@ module.exports = function(grunt) {
 			tested = tested||false;
 			var _path = "../src/" + relative_path;
 			if( true === tested ){
-				_path = "builder/" + folders.templates +""+ relative_path;
+				_path = "docu/builder/" + folders.templates +""+ relative_path;
 			}
 			try {
 				var pass_test = fs.statSync(_path).isFile()||fs.statSync(_path).isDirectory();
@@ -192,11 +192,11 @@ module.exports = function(grunt) {
 			var pages = '../src/'+folders.pages;
 			try {
 				if( !fs.statSync(pages).isDirectory() ){
-					pages = 'builder/'+folders.templates+folders.pages;
+					pages = 'docu/builder/'+folders.templates+folders.pages;
 				}
 			}
 			catch (err) {
-				pages = 'builder/'+folders.templates+folders.pages;
+				pages = 'docu/builder/'+folders.templates+folders.pages;
 			}
 			
 			fsx.walk(pages)
