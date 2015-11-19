@@ -20,7 +20,7 @@ module.exports = function(grunt) {
 		
 		var nunjucks = require('nunjucks'),
 			markdown = require('nunjucks-markdown');
-		var env = nunjucks.configure('../');
+		var env = nunjucks.configure('./');
 		env.addFilter('indexof', function(str, cmpstr) {
 			return str.indexOf(cmpstr);
 		});
@@ -132,9 +132,9 @@ module.exports = function(grunt) {
 		 */
 		function resolve_path(relative_path,tested){
 			tested = tested||false;
-			var _path = "../src/" + relative_path;
+			var _path = "./src/" + relative_path;
 			if( true === tested ){
-				_path = "docu/builder/" + folders.templates +""+ relative_path;
+				_path = "./builder/" + folders.templates +""+ relative_path;
 			}
 			try {
 				var pass_test = fs.statSync(_path).isFile()||fs.statSync(_path).isDirectory();
@@ -149,10 +149,11 @@ module.exports = function(grunt) {
 		 * set up folders and defaults
 		 */
 		function create_structure(){
+			
 			wrench.mkdirSyncRecursive('../site/'+folders.assests, 0777);
 			
 			//do defaults first
-			fsx.copy('builder/'+folders.templates+folders.assests, '../site/'+folders.assests, {"clobber" :true}, function (err) {
+			fsx.copy('./builder/'+folders.templates+folders.assests, '../site/'+folders.assests, {"clobber" :true}, function (err) {
 				if (err) return grunt.log.writeln(err);
 
 				var items = []; // files, directories, symlinks, etc
@@ -176,7 +177,7 @@ module.exports = function(grunt) {
 					}
 				})
 				.on('end', function () {
-					//grunt.log.writeln(items); // => [ ... array of files]
+					grunt.log.writeln(items); // => [ ... array of files]
 				});
 			
 			}); 
@@ -192,11 +193,11 @@ module.exports = function(grunt) {
 			var pages = '../src/'+folders.pages;
 			try {
 				if( !fs.statSync(pages).isDirectory() ){
-					pages = 'docu/builder/'+folders.templates+folders.pages;
+					pages = './builder/'+folders.templates+folders.pages;
 				}
 			}
 			catch (err) {
-				pages = 'docu/builder/'+folders.templates+folders.pages;
+				pages = './builder/'+folders.templates+folders.pages;
 			}
 			
 			fsx.walk(pages)
@@ -230,7 +231,7 @@ module.exports = function(grunt) {
 						data_block["vars"]={
 							"showstuff":true
 						};
-						sitemap.pages[file_name]=data_block;
+						sitemap.pages[file_name] = extend(sitemap.pages[file_name],data_block[file_name]);
 						//grunt.log.writeln(sitemap);
 					}
 					
@@ -312,7 +313,7 @@ module.exports = function(grunt) {
 				var root = page_obj.root.replace(new RegExp("[\/]+$", "g"), "");
 
 				var page = page_obj.nav_key+".html";
-				var targetFile = '../'+page_obj.folder_root+'/'+page;
+				var targetFile = page_obj.folder_root+page;
 				var content = fs.readFileSync(sourceFile,'utf8');
 				
 				if(content.indexOf('"+current_build+"')>0){
