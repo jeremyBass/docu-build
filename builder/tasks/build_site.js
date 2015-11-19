@@ -55,7 +55,7 @@ module.exports = function(grunt) {
 		fsx.removeSync('../site');
 
 		//read the setting and load as an object
-		var sitemap_path = 'src/sitemap.json';
+		var sitemap_path = '../src/sitemap.json';
 		var sitemap = {};
 		try {
 			if(fs.statSync(sitemap_path).isFile()){
@@ -96,9 +96,9 @@ module.exports = function(grunt) {
 			"pages":{
 			}
 		};
-		 
-		sitemap = extend(settings_defaults,sitemap);
-		
+		// deep so we keep what is there and only lose undefinds
+		sitemap = extend(true,settings_defaults,sitemap);
+
 		// overwrite : templates/blocks/* => src/blocks/*
 		// overwrite : templates/assests/* => src/assests/*
 		// overwrite : templates/pages/* => src/page/*
