@@ -55,7 +55,48 @@ module.exports = function(grunt) {
 		fsx.removeSync('./site');
 
 		//read the setting and load as an object
-		var sitemap = grunt.file.readJSON('src/sitemap.json');
+		var sitemap_path = 'src/sitemap.json';
+		var sitemap = {};
+		try {
+			if(fs.statSync(sitemap_path).isFile()){
+				sitemap = grunt.file.readJSON(sitemap_path);
+			}
+		}
+		catch (err) {
+			// really see no need to stop for node js not having a file_exists() :\
+		}
+
+		
+		var settings_defaults = {
+			"globals":{
+				"repo":{
+					"name":"docu-build",
+					"owner":"jeremyBass"
+				},
+				"google_analytics":"UA-XXXXXXXX-XX",
+				"contact":{
+					"department":"University Communications",
+					"name":"Washington State University",
+					"location":"ITB",
+					"streetAddress":"ITB",
+					"addressLocality":"Pullman",
+					"addressRegion":"WA",
+					"postalCode":"99164",
+					"telephone":"(509) 335-2700",
+					"email":"web.support@wsu.edu",
+					"contactPoint":"https://ucomm.wsu.edu/contact/",
+					"url":"https://github.com/washingtonstateuniversity"
+				}
+			},
+			"page_defaults":{
+				"root":"site/",
+				"nav_root":"site/"
+			},
+			"pages":{
+			}
+		};
+		 
+		sitemap = extend(settings_defaults,sitemap);
 		
 		// overwrite : templates/blocks/* => src/blocks/*
 		// overwrite : templates/assests/* => src/assests/*
