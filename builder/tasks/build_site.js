@@ -52,7 +52,7 @@ module.exports = function(grunt) {
 		var wrench = require('wrench'),
 			util = require('util');
 		//clear all of the site first thing and start fresh
-		fsx.removeSync('./site');
+		fsx.removeSync('../site');
 
 		//read the setting and load as an object
 		var sitemap_path = 'src/sitemap.json';
@@ -148,7 +148,7 @@ module.exports = function(grunt) {
 		 * set up folders and defaults
 		 */
 		function create_structure(){
-			wrench.mkdirSyncRecursive('site/'+folders.assests, 0777);
+			wrench.mkdirSyncRecursive('../site/'+folders.assests, 0777);
 			
 			//do defaults first
 			fsx.copy('builder/'+folders.templates+folders.assests, '../site/'+folders.assests, {"clobber" :true}, function (err) {
