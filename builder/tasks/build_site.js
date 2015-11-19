@@ -90,7 +90,8 @@ module.exports = function(grunt) {
 			},
 			"page_defaults":{
 				"root":"site/",
-				"nav_root":"site/"
+				"nav_root":"site/",
+				"folder_root":"../site/"
 			},
 			"pages":{
 			}
@@ -311,7 +312,7 @@ module.exports = function(grunt) {
 				var root = page_obj.root.replace(new RegExp("[\/]+$", "g"), "");
 
 				var page = page_obj.nav_key+".html";
-				var targetFile = '../'+root+'/'+page;
+				var targetFile = '../'+page_obj.folder_root+'/'+page;
 				var content = fs.readFileSync(sourceFile,'utf8');
 
 				//check for the need to use a fall back if it exists

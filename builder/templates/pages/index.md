@@ -4,12 +4,13 @@
 		"name":"index",
 		"nav_link":"",
 		"root":"./",
+		"folder_root":"../",
 		"title":"Main default",
 		"vars":{
 			"showstuff":true
 		}
 	}
-	}
+}
 #}
 <!--
 
