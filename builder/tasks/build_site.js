@@ -71,11 +71,13 @@ module.exports = function(grunt) {
 			"templates":"templates/",
 			"template":"main.tmpl",
 		};
-		if( "undefined" === sitemap.page_defaults.content_folders ){
+		if( undefined === sitemap.page_defaults.content_folders ){
 			sitemap.page_defaults.content_folders = {};
+			//grunt.log.writeln("didn't have <------sitemap.page_defaults.content_folders");
 		}
 		for (var item in content_folders){
-			if( "undefined" === sitemap.page_defaults.content_folders[item] ){
+			//grunt.log.writeln("looking for --------------->> "+item);
+			if( undefined === sitemap.page_defaults.content_folders[item] ){
 				sitemap.page_defaults.content_folders[item] = content_folders[item];
 			}
 		}
@@ -143,61 +145,113 @@ module.exports = function(grunt) {
 		/*
 		 * This will apply defaults and build the nav
 		 */
-		function build_site_obj(){
+		function build_site_obj(callback){
 			var nav = {};
-			for (var page_key in sitemap.pages) {
-				grunt.log.writeln("working "+page_key);
-
-				//apply defaults were needed
-				sitemap.pages[page_key].nav_key = page_key;
-				//note extend will not work here, for some reason it'll alter the ref of defaults
-				//we'll have to do it by hand for the moment
-				for (var objKey in defaults){
-					if(typeof sitemap.pages[page_key][objKey] === "undefined"){
-						sitemap.pages[page_key][objKey] = defaults[objKey];
-					}
+			var pages = 'src/'+folders.pages;
+			try {
+				if( !fs.statSync(pages).isDirectory() ){
+					pages = 'builder/'+folders.templates+folders.pages;
 				}
-				
-				//build nav
-				var tmpobj={};
-				var root = sitemap.pages[page_key].nav_root.replace(new RegExp("[\/]+$", "g"), "");
-				
-				var linkTitle = sitemap.pages[page_key].title;
-				if(typeof sitemap.pages[page_key].nav_title !== "undefined" ){
-					linkTitle = sitemap.pages[page_key].nav_title;
-				}
-
-				if(typeof sitemap.pages[page_key].nav_link !== "undefined" ){
-					tmpobj[linkTitle]=sitemap.pages[page_key].nav_link;
-				}else{
-					tmpobj[linkTitle]=root+'/'+sitemap.pages[page_key].nav_key+".html";
-				}
-				if(typeof sitemap.pages[page_key].child_nav !== "undefined"){
-					var r = tmpobj[linkTitle];
-					var navarray = {};
-					
-					var mainlink= sitemap.pages[page_key].title;
-					if(typeof sitemap.pages[page_key].nav_title !== "undefined" ){
-						mainlink = sitemap.pages[page_key].nav_title;
-					}
-					navarray[mainlink] = r;
-					for (var link in sitemap.pages[page_key].child_nav){
-						var url = link;
-						var title = sitemap.pages[page_key].child_nav[link];
-						if(link.indexOf('#')==0){
-							url=r+link;
-						}
-						navarray[title] = url;
-					}
-					tmpobj[linkTitle]=navarray;
-				}
-				nav = extend(nav,tmpobj);
-				grunt.log.writeln("worked "+page_key);
 			}
-			sitemap.nav = nav;
+			catch (err) {
+				pages = 'builder/'+folders.templates+folders.pages;
+			}
+			
+			fsx.walk(pages)
+			.on('readable', function () {
+				var item;
+				while ((item = this.read())) {
+					
+					if( !fs.statSync(item.path).isDirectory() ){
+						var content = fs.readFileSync(item.path);
+						var file_name = item.path.split('\\').pop().split('.')[0];
+						var re = /(?:{#\s+?\n?\r?)((?:^.*?\n?\r?)+)(?:\s+?\n?\r?#})/gmi;
+						var m;
+						var data_block = {};
+						while ((m = re.exec(content)) !== null) {
+							if (m.index === re.lastIndex) {
+								re.lastIndex++;
+							}
+							var _page_meta = m[1];
+							try {
+								data_block = JSON.parse(_page_meta);
+							}
+							catch (err) {
+								console.log("FILE ->> "+ item.path);
+								console.log(err);
+							}
+							
+						}
+						if( undefined === data_block.title){
+							data_block.title = file_name.split('-').join(" ");
+						}
+						data_block["vars"]={
+							"showstuff":true
+						};
+						sitemap.pages[file_name]=data_block;
+						//grunt.log.writeln(sitemap);
+					}
+					
+				}
+			})
+			.on('end', function () {
+				//console.log(sitemap); // => [ ... array of files]
+				for (var page_key in sitemap.pages) {
+					grunt.log.writeln("working "+page_key);
+
+					//apply defaults were needed
+					sitemap.pages[page_key].nav_key = page_key;
+					//note extend will not work here, for some reason it'll alter the ref of defaults
+					//we'll have to do it by hand for the moment
+					for (var objKey in defaults){
+						if(typeof sitemap.pages[page_key][objKey] === "undefined"){
+							sitemap.pages[page_key][objKey] = defaults[objKey];
+						}
+					}
+
+					//build nav
+					var tmpobj={};
+					var root = sitemap.pages[page_key].nav_root.replace(new RegExp("[\/]+$", "g"), "");
+
+					var linkTitle = sitemap.pages[page_key].title;
+					if(typeof sitemap.pages[page_key].nav_title !== "undefined" ){
+						linkTitle = sitemap.pages[page_key].nav_title;
+					}
+
+					if(typeof sitemap.pages[page_key].nav_link !== "undefined" ){
+						tmpobj[linkTitle]=sitemap.pages[page_key].nav_link;
+					}else{
+						tmpobj[linkTitle]=root+'/'+sitemap.pages[page_key].nav_key+".html";
+					}
+					if(typeof sitemap.pages[page_key].child_nav !== "undefined"){
+						var r = tmpobj[linkTitle];
+						var navarray = {};
+
+						var mainlink= sitemap.pages[page_key].title;
+						if(typeof sitemap.pages[page_key].nav_title !== "undefined" ){
+							mainlink = sitemap.pages[page_key].nav_title;
+						}
+						navarray[mainlink] = r;
+						for (var link in sitemap.pages[page_key].child_nav){
+							var url = link;
+							var title = sitemap.pages[page_key].child_nav[link];
+							if(link.indexOf('#')==0){
+								url=r+link;
+							}
+							navarray[title] = url;
+						}
+						tmpobj[linkTitle]=navarray;
+					}
+					nav = extend(nav,tmpobj);
+					grunt.log.writeln("worked "+page_key);
+				}
+				sitemap.nav = nav;
+
+				callback();
+			});
 		}
 
-		build_site_obj();
+		
 
 		
 		/*
@@ -209,19 +263,16 @@ module.exports = function(grunt) {
 
 				var site_obj = sitemap;
 				var page_obj = site_obj.pages[key];
-				grunt.log.writeln(cwd);
-				grunt.log.writeln(folders.template+"<<<---folders.template");
+
 				var sourceFile = resolve_path(folders.template);
-				grunt.log.writeln(sourceFile+"<<<---sourceFile");
-				
-				
+
 				//var tmpFile = 'build/deletable.tmp';
 				var root = page_obj.root.replace(new RegExp("[\/]+$", "g"), "");
-				
+
 				var page = page_obj.nav_key+".html";
 				var targetFile = root+'/'+page;
 				var content = fs.readFileSync(sourceFile,'utf8');
-				
+
 				//check for the need to use a fall back if it exists
 				var re = /(?:{% include ")(.*?)(?:" -%})/gmi;
 				var m;
@@ -239,7 +290,7 @@ module.exports = function(grunt) {
 						content = content.split('{% include "'+_path+'" -%}').join('{% include "'+_resoled+'" -%}');
 					}
 				}
-				
+
 				site_obj.current_page=page;
 				site_obj.current_build=page_obj.nav_key;
 				grunt.log.writeln("building "+targetFile);
@@ -252,7 +303,7 @@ module.exports = function(grunt) {
 				});
 			}
 		}
-		build_page();
+		build_site_obj(build_page);
 
 		grunt.task.current.async();
 	});

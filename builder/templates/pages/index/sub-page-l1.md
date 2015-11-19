@@ -1,10 +1,12 @@
-<h1>WSU Docu Builder</h1>
-<h2 id="repo_github_header">Repo : <a href="https://github.com/{{ globals.repo.owner }}/{{ globals.repo.name }}">View On GitHub</a></h2>
-
 {% markdown %}
+# WSU Docu Builder
+This is a sub page for docs 
+
+# Sub Page Level 1
+    
 <div class="row halves"><div class="column">
 
-### Content From the Src folder!!!
+###Default Foo Content!!!
 
 </div><div class="column">
 

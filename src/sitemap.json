@@ -21,28 +21,8 @@
 	},
 	"page_defaults":{
 		"root":"site/",
-		"nav_root":"site/",
-		"template":"main.tmpl",
-		"content_folders": {
-			"assests":"assests/",
-			"js":"js/",
-			"css":"css/",
-			"img":"img/",
-			"pages":"pages/",
-			"templates":"templates/",
-			"blocks":"blocks/",
-			"template":"main.tmpl"
-		}
+		"nav_root":"site/"
 	},
 	"pages":{
-		"index":{
-			"name":"index",
-			"nav_link":"",
-			"root":"./",
-			"title":"Main default",
-			"vars":{
-				"showstuff":true
-			}
-		}
 	}
 }
