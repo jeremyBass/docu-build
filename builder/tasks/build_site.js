@@ -315,7 +315,7 @@ module.exports = function(grunt) {
 				var targetFile = '../'+page_obj.folder_root+'/'+page;
 				var content = fs.readFileSync(sourceFile,'utf8');
 				
-				if(_path.indexOf('"+current_build+"')>0){
+				if(content.indexOf('"+current_build+"')>0){
 					content = content.split('"+current_build+"').join(page_obj.nav_key);
 				}
 				//check for the need to use a fall back if it exists
