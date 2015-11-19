@@ -151,7 +151,7 @@ module.exports = function(grunt) {
 			wrench.mkdirSyncRecursive('site/'+folders.assests, 0777);
 			
 			//do defaults first
-			fsx.copy('builder/'+folders.templates+folders.assests, 'site/'+folders.assests, {"clobber" :true}, function (err) {
+			fsx.copy('builder/'+folders.templates+folders.assests, '../site/'+folders.assests, {"clobber" :true}, function (err) {
 				if (err) return grunt.log.writeln(err);
 
 				var items = []; // files, directories, symlinks, etc
@@ -159,7 +159,7 @@ module.exports = function(grunt) {
 				.on('readable', function () {
 					var item;
 					while ((item = this.read())) {
-						var _path = (item.path).split('src\\'+(folders.assests.split("/").join("\\"))).join("site\\"+folders.assests.split("/").join("\\"));
+						var _path = (item.path).split('src\\'+(folders.assests.split("/").join("\\"))).join("..\site\\"+folders.assests.split("/").join("\\"));
 						try {
 							if(fs.statSync(_path).isFile()){
 								fsx.removeSync(_path);
