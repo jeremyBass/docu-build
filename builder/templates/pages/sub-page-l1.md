@@ -23,7 +23,7 @@ This is a sub page for docs
     
 <div class="row halves"><div class="column">
 
-![home page with sample data](site/img/home-page-preview-with-sample.png "Home page")
+![home page with sample data](site/assests/img/home-page-preview-with-sample.png "Home page")
 
 </div><div class="column">
 
@@ -48,6 +48,7 @@ This is a sub page for docs
 
 </div></div>
 
+![Sample full width image](site/assests/img/set-the-theme-child.png "theme child")
 
 
 {% endmarkdown %}
