@@ -311,7 +311,7 @@ module.exports = function(grunt) {
 				var root = page_obj.root.replace(new RegExp("[\/]+$", "g"), "");
 
 				var page = page_obj.nav_key+".html";
-				var targetFile = root+'/'+page;
+				var targetFile = '../'+root+'/'+page;
 				var content = fs.readFileSync(sourceFile,'utf8');
 
 				//check for the need to use a fall back if it exists
