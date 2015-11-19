@@ -20,7 +20,7 @@ module.exports = function(grunt) {
 		
 		var nunjucks = require('nunjucks'),
 			markdown = require('nunjucks-markdown');
-		var env = nunjucks.configure('./');
+		var env = nunjucks.configure('../');
 		env.addFilter('indexof', function(str, cmpstr) {
 			return str.indexOf(cmpstr);
 		});
@@ -134,7 +134,7 @@ module.exports = function(grunt) {
 			tested = tested||false;
 			var _path = "../src/" + relative_path;
 			if( true === tested ){
-				_path = "/builder/" + folders.templates +""+ relative_path;
+				_path = "builder/" + folders.templates +""+ relative_path;
 			}
 			try {
 				var pass_test = fs.statSync(_path).isFile()||fs.statSync(_path).isDirectory();
@@ -192,11 +192,11 @@ module.exports = function(grunt) {
 			var pages = '../src/'+folders.pages;
 			try {
 				if( !fs.statSync(pages).isDirectory() ){
-					pages = '/builder/'+folders.templates+folders.pages;
+					pages = 'builder/'+folders.templates+folders.pages;
 				}
 			}
 			catch (err) {
-				pages = '/builder/'+folders.templates+folders.pages;
+				pages = 'builder/'+folders.templates+folders.pages;
 			}
 			
 			fsx.walk(pages)
@@ -314,7 +314,10 @@ module.exports = function(grunt) {
 				var page = page_obj.nav_key+".html";
 				var targetFile = '../'+page_obj.folder_root+'/'+page;
 				var content = fs.readFileSync(sourceFile,'utf8');
-
+				
+				if(_path.indexOf('"+current_build+"')>0){
+					content = content.split('"+current_build+"').join(page_obj.nav_key);
+				}
 				//check for the need to use a fall back if it exists
 				var re = /(?:{% include ")(.*?)(?:" -%})/gmi;
 				var m;
@@ -324,10 +327,8 @@ module.exports = function(grunt) {
 					}
 					var _path = m[1];
 					var page_path = false;
-					if(_path.indexOf('"+current_build+"')>0){
-						page_path = _path.split('"+current_build+"').join(page_obj.nav_key);
-					}
-					var _resoled = resolve_path(false!==page_path?page_path:_path);
+					
+					var _resoled = resolve_path(_path);
 					if( false !== _resoled){
 						content = content.split('{% include "'+_path+'" -%}').join('{% include "'+_resoled+'" -%}');
 					}
