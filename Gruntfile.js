@@ -41,17 +41,23 @@ module.exports = function(grunt) {
 		copy: {
 			main: {
 				files: [
-					{expand: true,flatten: true, src: ['pub/build/*.html'], dest: '../site/'},
-					{expand: true,flatten: true, src: ['pub/build/index.html'], dest: '../'}
+					{expand: true,flatten: true, src: ['builder/pub/build/*.html'], dest: 'site/'},
+					{expand: true,flatten: true, src: ['builder/pub/build/index.html'], dest: ''}
+				]
+			},
+			defaults: {
+				files: [
+					{expand: true,flatten:false, src: ['builder/templates/assests'], dest: 'site/assests/'},
+					{expand: true,flatten: true, src: ['builder/pub/build/index.html'], dest: ''}
 				]
 			}
 		},
 		includereplace: {
 			prep: {
 				// Files to perform replacements and includes with
-				src: 'build/*.html',
+				src: 'builder/build/*.html',
 				// Destination directory to copy files to
-				dest: 'pub/'
+				dest: 'builder/pub/'
 			},
 		},
 		preprocess : {
@@ -64,28 +70,10 @@ module.exports = function(grunt) {
 			},
 			index : {
 				src : 'src/index.html',
-				dest : 'build/index.html',
+				dest : 'builder/build/index.html',
 				options : {
 					context : {
 						page : 'index'
-					}
-				}
-			},
-			production : {
-				src : 'src/index.html',
-				dest : 'build/production.html',
-				options : {
-					context : {
-						page : 'production'
-					}
-				}
-			},
-			development : {
-				src : 'src/index.html',
-				dest : 'build/development.html',
-				options : {
-					context : {
-						page : 'development'
 					}
 				}
 			},
@@ -96,7 +84,7 @@ module.exports = function(grunt) {
 	grunt.initConfig(config);
 
 	require('load-grunt-tasks')(grunt);
-	grunt.loadTasks('tasks');
+	grunt.loadTasks('builder/tasks');
 
 
 	// Default task(s).

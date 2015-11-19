@@ -1,27 +1,11 @@
-{# 
-{
-	"index":{
-		"name":"index",
-		"nav_link":"",
-		"root":"./",
-		"title":"Main default",
-		"vars":{
-			"showstuff":true
-		}
-	}
-	}
-#}
-<!--
-
-} -->
-
-<h1>WSU Docu Builder</h1>
-<h2 id="repo_github_header">Repo : <a href="https://github.com/{{ globals.repo.owner }}/{{ globals.repo.name }}">View On GitHub</a></h2>
-
 {% markdown %}
+This is a sub page for docs 
+
+# Sub Page Level 2!!!
+    
 <div class="row halves"><div class="column">
 
-### Default Foo Content!!!
+###Default Foo Content!!!
 
 </div><div class="column">
 
