@@ -156,7 +156,7 @@ module.exports = function(grunt) {
 				if (err) grunt.log.writeln(err);
 			});
 			grunt.log.writeln('-------------where ../src/ is -----------');
-			grunt.log.writeln(require('path').dirname('../src/'));
+			grunt.log.writeln(require('path').resolve('../src/'));
 			grunt.log.writeln('-------------where ../src/ is -----------');
 			var items = [];
 			fsx.walk('../src/')
