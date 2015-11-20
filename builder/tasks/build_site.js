@@ -231,7 +231,7 @@ module.exports = function(grunt) {
 						data_block["vars"]={
 							"showstuff":true
 						};
-						sitemap.pages[file_name] = extend(true,sitemap.pages[file_name],data_block[file_name]);
+						sitemap.pages[file_name] = extend(true,data_block[file_name],sitemap.pages[file_name]);
 						//grunt.log.writeln(sitemap);
 					}
 					
