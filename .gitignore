@@ -1,3 +1,6 @@
+# ignore build folder as that will be houseing temp files to work with
+build
+
 # Logs
 logs
 *.log

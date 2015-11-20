@@ -149,15 +149,18 @@ module.exports = function(grunt) {
 		 * set up folders and defaults
 		 */
 		function create_structure(){
-			
+			fsx.removeSync('./build');
 			wrench.mkdirSyncRecursive('../site/'+folders.assests, 0777);
-			
+            wrench.mkdirSyncRecursive('./build/src/'+folders.assests, 0777);
+			fsx.copy('../src/', './build/src/', {"clobber" :true}, function (err) {
+				if (err) return grunt.log.writeln(err);
+			}); 
 			//do defaults first
 			fsx.copy('./builder/'+folders.templates+folders.assests, '../site/'+folders.assests, {"clobber" :true}, function (err) {
 				if (err) return grunt.log.writeln(err);
 
 				var items = []; // files, directories, symlinks, etc
-				fsx.walk('../src/'+folders.assests)
+				fsx.walk('./build/src/'+folders.assests)
 				.on('readable', function () {
 					var item;
 					while ((item = this.read())) {
