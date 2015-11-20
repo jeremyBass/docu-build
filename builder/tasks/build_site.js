@@ -156,7 +156,7 @@ module.exports = function(grunt) {
 				if (err) return grunt.log.writeln(err);
 			}); 
 
-
+			var items = [];
 			fsx.walk('../src/')
 			.on('readable', function () {
 				var item;
