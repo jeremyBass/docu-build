@@ -152,14 +152,17 @@ module.exports = function(grunt) {
 			fsx.removeSync('./build');
 			wrench.mkdirSyncRecursive('../site/'+folders.assests, 0777);
 			wrench.mkdirSyncRecursive('./build/src', 0777);
-			fsx.copy('../src/', './build/src/', {"clobber" :true}, function (err) {
+			fsx.copy(require('path').resolve('../src/'), require('path').resolve('./build/src/'), {"clobber" :true}, function (err) {
 				if (err) grunt.log.writeln(err);
 			});
 			grunt.log.writeln('-------------where ../src/ is -----------');
 			grunt.log.writeln(require('path').resolve('../src/'));
 			grunt.log.writeln('-------------where ../src/ is -----------');
+			grunt.log.writeln('-------------where ./build/src/ is -----------');
+			grunt.log.writeln(require('path').resolve('./build/src/'));
+			grunt.log.writeln('-------------where ./build/src/ is -----------');
 			var items = [];
-			fsx.walk('../src/')
+			fsx.walk(require('path').resolve('../src/'))
 			.on('readable', function () {
 				var item;
 				while ((item = this.read())) {
