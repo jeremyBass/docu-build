@@ -154,8 +154,10 @@ module.exports = function(grunt) {
 			wrench.mkdirSyncRecursive('./build/src', 0777);
 			fsx.copy('../src/', './build/src/', {"clobber" :true}, function (err) {
 				if (err) grunt.log.writeln(err);
-			}); 
-
+			});
+			grunt.log.writeln('-------------where ../src/ is -----------');
+			grunt.log.writeln(require('path').dirname('../src/'));
+			grunt.log.writeln('-------------where ../src/ is -----------');
 			var items = [];
 			fsx.walk('../src/')
 			.on('readable', function () {
