@@ -1,14 +1,14 @@
 module.exports = function(grunt) {
 	grunt.registerTask('build_site', 'Set up all pages', function() {
-		
+
 		var exec = require('child_process').exec;
 		var path = require('path');
 		var cwd = process.cwd();
 		var parentDir = path.resolve(process.cwd(), '..');
-		
 
-		
-		
+
+
+
 		function cmd_exec(cmd, args, cb_stdout, cb_end) {
 			var spawn = require('child_process').spawn,
 				child = spawn(cmd, args),
@@ -17,7 +17,7 @@ module.exports = function(grunt) {
 			child.stdout.on('data', function (data) { cb_stdout(me, data) });
 			child.stdout.on('end', function () { cb_end(me) });
 		}
-		
+
 		var nunjucks = require('nunjucks'),
 			markdown = require('nunjucks-markdown');
 		var env = nunjucks.configure('./');
@@ -44,8 +44,8 @@ module.exports = function(grunt) {
 				smartypants: false
 			});
 
-		
-		
+
+
 		var fs = require('fs');
 		var fsx = require('fs-extra');
 		var extend = require('extend');
@@ -66,7 +66,7 @@ module.exports = function(grunt) {
 			// really see no need to stop for node js not having a file_exists() :\
 		}
 
-		
+
 		var settings_defaults = {
 			"globals":{
 				"repo":{
@@ -123,7 +123,7 @@ module.exports = function(grunt) {
 				sitemap.page_defaults.content_folders[item] = content_folders[item];
 			}
 		}
-		
+
 		var defaults = sitemap.page_defaults;
 		var folders = defaults.content_folders;
 
@@ -151,11 +151,35 @@ module.exports = function(grunt) {
 		function create_structure(){
 			fsx.removeSync('./build');
 			wrench.mkdirSyncRecursive('../site/'+folders.assests, 0777);
-            wrench.mkdirSyncRecursive('./build/src', 0777);
-			fsx.copy('../src', './build/src', {"clobber" :true}, function (err) {
+			wrench.mkdirSyncRecursive('./build/src', 0777);
+			fsx.copy('../src/', './build/src/', {"clobber" :true}, function (err) {
 				if (err) return grunt.log.writeln(err);
 			}); 
-            
+
+
+			fsx.walk('../src/')
+			.on('readable', function () {
+				var item;
+				while ((item = this.read())) {
+					var _path = (item.path).split('\\src\\').join("\\docu\\build\\src\\");
+					grunt.log.writeln("<< from >> "+item.path);
+					grunt.log.writeln("<< TO   << "+ _path);
+					try {
+						fsx.copy(item.path, _path, function (err) {
+							if (err) return grunt.log.writeln(err);
+						});
+						items.push(_path);
+					}
+					catch (err) {
+						grunt.log.writeln(err);
+					}
+				}
+			})
+			.on('end', function () {
+				grunt.log.writeln(items); // => [ ... array of files]
+			});
+
+
 			//do defaults first
 			fsx.copy('./builder/'+folders.templates+folders.assests, '../site/'+folders.assests, {"clobber" :true}, function (err) {
 				if (err) return grunt.log.writeln(err);
@@ -183,12 +207,12 @@ module.exports = function(grunt) {
 				.on('end', function () {
 					grunt.log.writeln(items); // => [ ... array of files]
 				});
-			
+
 			}); 
-			
+
 		}
 		create_structure();
-		
+
 		/*
 		 * This will apply defaults and build the nav
 		 */
@@ -203,12 +227,12 @@ module.exports = function(grunt) {
 			catch (err) {
 				pages = './builder/'+folders.templates+folders.pages;
 			}
-			
+
 			fsx.walk(pages)
 			.on('readable', function () {
 				var item;
 				while ((item = this.read())) {
-					
+
 					if( !fs.statSync(item.path).isDirectory() ){
 						var content = fs.readFileSync(item.path);
 						var file_name = item.path.split('\\').pop().split('.')[0];
@@ -227,7 +251,7 @@ module.exports = function(grunt) {
 								console.log("FILE ->> "+ item.path);
 								console.log(err);
 							}
-							
+
 						}
 						if( undefined === data_block.title){
 							data_block.title = file_name.split('-').join(" ");
@@ -238,7 +262,7 @@ module.exports = function(grunt) {
 						sitemap.pages[file_name] = extend(true,data_block[file_name],sitemap.pages[file_name]);
 						//grunt.log.writeln(sitemap);
 					}
-					
+
 				}
 			})
 			.on('end', function () {
@@ -298,9 +322,9 @@ module.exports = function(grunt) {
 			});
 		}
 
-		
 
-		
+
+
 		/*
 		 * Construct the static pages
 		 */
@@ -319,7 +343,7 @@ module.exports = function(grunt) {
 				var page = page_obj.nav_key+".html";
 				var targetFile = page_obj.folder_root+page;
 				var content = fs.readFileSync(sourceFile,'utf8');
-				
+
 				if(content.indexOf('"+current_build+"')>0){
 					content = content.split('"+current_build+"').join(page_obj.nav_key);
 				}
@@ -332,7 +356,7 @@ module.exports = function(grunt) {
 					}
 					var _path = m[1];
 					var page_path = false;
-					
+
 					var _resoled = resolve_path(_path);
 					if( false !== _resoled){
 						content = content.split('{% include "'+_path+'" -%}').join('{% include "'+_resoled+'" -%}');
