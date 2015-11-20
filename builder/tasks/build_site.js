@@ -153,7 +153,7 @@ module.exports = function(grunt) {
 			wrench.mkdirSyncRecursive('../site/'+folders.assests, 0777);
 			wrench.mkdirSyncRecursive('./build/src', 0777);
 			fsx.copy('../src/', './build/src/', {"clobber" :true}, function (err) {
-				if (err) return grunt.log.writeln(err);
+				if (err) grunt.log.writeln(err);
 			}); 
 
 			var items = [];
@@ -166,7 +166,7 @@ module.exports = function(grunt) {
 					grunt.log.writeln("<< TO   << "+ _path);
 					try {
 						fsx.copy(item.path, _path, function (err) {
-							if (err) return grunt.log.writeln(err);
+							if (err) grunt.log.writeln(err);
 						});
 						items.push(_path);
 					}
