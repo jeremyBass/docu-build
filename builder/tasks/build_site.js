@@ -285,7 +285,7 @@ module.exports = function(grunt) {
 						}
 						tmpobj[linkTitle]=navarray;
 					}
-					nav = extend(nav,tmpobj);
+					nav = extend(true,tmpobj,nav);
 					grunt.log.writeln("worked "+page_key);
 				}
 				sitemap.nav = nav;
