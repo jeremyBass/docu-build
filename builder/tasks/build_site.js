@@ -125,7 +125,7 @@ module.exports = function(grunt) {
 				sitemap.page_defaults.content_folders[item] = content_folders[item];
 			}
 		}
-		console.log(sitemap);
+		//console.log(sitemap);
 		var defaults = sitemap.page_defaults;
 		var folders = defaults.content_folders;
 
@@ -182,7 +182,7 @@ module.exports = function(grunt) {
 		function build_site_obj(callback){
 			var nav = {};
 			var pages = path.resolve('./build/src/'+folders.pages);
-			console.log(pages+"<<<<<<<<<<<<<< looking to");
+			//console.log(pages+"<<<<<<<<<<<<<< looking to");
 			try {
 				if( !fs.statSync(pages).isDirectory() ){
 					pages = path.resolve('./builder/'+folders.templates+folders.pages);
@@ -192,7 +192,7 @@ module.exports = function(grunt) {
 				//console.log(err);
 				pages = path.resolve('./builder/'+folders.templates+folders.pages);
 			}
-			console.log(pages+">>>>>>>>>>>>>>> went with ////////////");
+			//console.log(pages+">>>>>>>>>>>>>>> went with ////////////");
 			fsx.walk(pages)
 			.on('readable', function () {
 				var item;
@@ -210,7 +210,7 @@ module.exports = function(grunt) {
 								re.lastIndex++;
 							}
 							var _page_meta = m[1];
-							console.log(_page_meta);
+							//console.log(_page_meta);
 							try {
 								data_block = JSON.parse(_page_meta);
 							}
@@ -219,8 +219,8 @@ module.exports = function(grunt) {
 							}
 
 						}
-						console.log("json parsing -- ON "+file_name+"---------------/////");
-						console.log(data_block);
+						//console.log("json parsing -- ON "+file_name+"---------------/////");
+						//console.log(data_block);
 						if(  "undefined" !== typeof data_block.name ){
 							if( "undefined" === typeof data_block.title){
 								data_block["title"] = file_name.split('-').join(" ");
@@ -229,14 +229,14 @@ module.exports = function(grunt) {
 								"showstuff":true
 							};
 							sitemap.pages[file_name] = extend(true,data_block,sitemap.pages[file_name]);
-							console.log("added to sitemap.pages[file_name] on "+file_name+"---------------/////");
+							//console.log("added to sitemap.pages[file_name] on "+file_name+"---------------/////");
 						}
 					}
 				}
 			})
 			.on('end', function () {
-				console.log("Starting page parsing -----------------/////");
-				console.log(sitemap);
+				//console.log("Starting page parsing -----------------/////");
+				//console.log(sitemap);
 				for (var page_key in sitemap.pages) {
 					//apply defaults were needed
 					sitemap.pages[page_key].nav_key = page_key;
