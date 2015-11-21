@@ -93,7 +93,8 @@ module.exports = function(grunt) {
 			"page_defaults":{
 				"root":"site/",
 				"nav_root":"site/",
-				"folder_root":"../site/"
+				"folder_root":"../site/",
+				"nav_link":false
 			},
 			"pages":{
 			}
