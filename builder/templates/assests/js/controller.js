@@ -17,7 +17,7 @@
 $(document).ready(function(){
 	
 	if(window.location.href.indexOf('#')>0){
-		var hash = window.location.href.split('#')[0];
+		var hash = window.location.href.split('#')[1];
 		$('#'+hash).addClass('backgroundAnimated');
 	}
 	
@@ -34,6 +34,8 @@ $(document).ready(function(){
 		var target = $("#"+element.attr("id"));
 		element.on("click", function(){
 			window.location = window.location.href.split('#')[0] +"#"+element.attr("id");
+			$('.backgroundAnimated').removeClass('backgroundAnimated');
+			$("#"+element.attr("id")).addClass('backgroundAnimated');
 		});
 	});
 	$('.wrapper.markdown-body img').wrap('<div class="img_zoom">');
