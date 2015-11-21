@@ -125,7 +125,7 @@ module.exports = function(grunt) {
 				sitemap.page_defaults.content_folders[item] = content_folders[item];
 			}
 		}
-
+		console.log(sitemap);
 		var defaults = sitemap.page_defaults;
 		var folders = defaults.content_folders;
 
