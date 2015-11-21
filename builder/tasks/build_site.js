@@ -158,14 +158,14 @@ module.exports = function(grunt) {
 				//do defaults first
 				fsx.copy( path.resolve('./builder/'+folders.templates+folders.assests), path.resolve('../site/'+folders.assests), {"clobber" :true}, function (err) {
 					if (err) return grunt.log.writeln(err);
-					var custom_src = path.join(__dirname, './build/src/'+folders.assests);
+					var custom_src = path.resolve('./build/src/'+folders.assests);
 					if( !fs.existsSync(custom_src) || !fs.statSync(custom_src).isDirectory() ){
 						// we don't need to do anything if the src is not there
 						callback();
 					}else{
 						// we have done the defaults and know there is a 
 						// src assests folder so we do the overrides now
-						fsx.walk(path.join(__dirname, 'build/src/'+folders.assests))
+						fsx.walk( path.resolve('./build/src/'+folders.assests) )
 						.on('readable', function () {
 							while ((item = this.read())) {
 								var _path = (item.path).split('\\src\\'+(folders.assests.split("/").join("\\"))).join("\\site\\"+folders.assests.split("/").join("\\"));
@@ -196,9 +196,9 @@ module.exports = function(grunt) {
 		 */
 		function build_site_obj(callback){
 			var nav = {};
-			var pages = path.join(__dirname, './builder/'+folders.templates+folders.pages)
+			var pages = path.resolve('./builder/'+folders.templates+folders.pages)
 			try {
-				var _pages = path.join(__dirname, './build/src/'+folders.pages);
+				var _pages = path.resolve('./build/src/'+folders.pages);
 				if( !fs.statSync(_pages).isDirectory() ){
 					pages = _pages
 				}
