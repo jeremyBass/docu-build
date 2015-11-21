@@ -192,7 +192,7 @@ module.exports = function(grunt) {
 						if (err) return grunt.log.writeln(err);
 
 						var items = []; // files, directories, symlinks, etc
-						fsx.walk('./build/src/'+folders.assests)
+						fsx.walk(path.join(__dirname, './build/src/'+folders.assests))
 						.on('readable', function () {
 							var item;
 							while ((item = this.read())) {
@@ -212,7 +212,7 @@ module.exports = function(grunt) {
 							}
 						})
 						.on('end', function () {
-							grunt.log.writeln('./builder/'+folders.templates+folders.assests); 
+							grunt.log.writeln('ON END OF create_structure ==========~~~~~~~~~~~~~~++++++++++'); 
 							grunt.log.writeln(items); // => [ ... array of files]
 							callback();
 						});
