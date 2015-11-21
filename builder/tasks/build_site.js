@@ -221,7 +221,7 @@ module.exports = function(grunt) {
 						}
 						console.log("json parsing -- ON "+file_name+"---------------/////");
 						console.log(data_block);
-						if(  "undefined" === typeof data_block.name ){
+						if(  "undefined" !== typeof data_block.name ){
 							if( "undefined" === typeof data_block.title){
 								data_block["title"] = file_name.split('-').join(" ");
 							}
