@@ -181,16 +181,15 @@ module.exports = function(grunt) {
 		 */
 		function build_site_obj(callback){
 			var nav = {};
-			var pages = path.resolve('./builder/'+folders.templates+folders.pages)
+			var pages = path.resolve('./build/src/'+folders.pages);
 			try {
-				var _pages = path.resolve('./build/src/'+folders.pages);
 				if( !fs.statSync(_pages).isDirectory() ){
-					pages = _pages
+					pages = path.resolve('./builder/'+folders.templates+folders.pages);
 				}
 			}
 			catch (err) {
 				//console.log(err);
-				// we don't really need to state that we couldn't find the src pages
+				pages = path.resolve('./builder/'+folders.templates+folders.pages);
 			}
 			fsx.walk(pages)
 			.on('readable', function () {
