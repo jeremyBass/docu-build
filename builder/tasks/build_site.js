@@ -163,7 +163,7 @@ module.exports = function(grunt) {
 				//grunt.log.writeln(path.resolve('./build/src/'));
 				//grunt.log.writeln('-------------where ./build/src/ is -----------');
 				var items = [];
-				fsx.walk(path.resolve('../src/'))
+				/*fsx.walk(path.resolve('../src/'))
 				.on('readable', function () {
 					var item;
 					while ((item = this.read())) {
@@ -181,11 +181,11 @@ module.exports = function(grunt) {
 						}
 					}
 				})
-				.on('end', function () {
-					grunt.log.writeln(items); // => [ ... array of files]
-					grunt.log.writeln("on end src"); 
-					grunt.log.writeln('./builder/'+folders.templates+folders.assests); 
-					grunt.log.writeln(path.join(__dirname, 'builder/'+folders.templates+folders.assests)); 
+				.on('end', function () {*/
+					//grunt.log.writeln(items); // => [ ... array of files]
+					//grunt.log.writeln("on end src"); 
+					//grunt.log.writeln('./builder/'+folders.templates+folders.assests); 
+					//grunt.log.writeln(path.join(__dirname, 'builder/'+folders.templates+folders.assests)); 
 					//do defaults first
 					fsx.copy('./builder/'+folders.templates+folders.assests, '../site/'+folders.assests, {"clobber" :true}, function (err) {
 						if (err) return grunt.log.writeln(err);
@@ -223,7 +223,7 @@ module.exports = function(grunt) {
 						}
 
 					}); 
-				});
+				//});
 			});
 		}
 		
