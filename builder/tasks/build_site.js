@@ -138,7 +138,7 @@ module.exports = function(grunt) {
 				_path = "./builder/" + folders.templates +""+ relative_path;
 			}
 			try {
-				var pass_test = fs.statSync(_path).isFile()||fs.statSync(_path).isDirectory();
+				var pass_test = fs.existsSync(_path) && (fs.statSync(_path).isFile()||fs.statSync(_path).isDirectory());
 				return pass_test ? _path : (tested ? false : resolve_path(relative_path,true));
 			}
 			catch (err) {
@@ -192,7 +192,7 @@ module.exports = function(grunt) {
 						if (err) return grunt.log.writeln(err);
 						var custom_src = path.join(__dirname, './build/src/'+folders.assests);
 						if( !fs.existsSync(custom_src) || !fs.statSync(custom_src).isDirectory() ){
-							grunt.log.writeln('ON END OF create_structure ./build/src/'+folders.assests+'==========~~~~~~~~~~~~~~++++++++++'); 
+							//grunt.log.writeln('ON END OF create_structure ./build/src/'+folders.assests+'==========~~~~~~~~~~~~~~++++++++++'); 
 							//grunt.log.writeln(items); // => [ ... array of files]
 							callback();
 						}else{
@@ -217,8 +217,8 @@ module.exports = function(grunt) {
 								}
 							})
 							.on('end', function () {
-								grunt.log.writeln('ON END OF create_structure ==========~~~~~~~~~~~~~~++++++++++'); 
-								grunt.log.writeln(items); // => [ ... array of files]
+								//grunt.log.writeln('ON END OF create_structure ==========~~~~~~~~~~~~~~++++++++++'); 
+								//grunt.log.writeln(items); // => [ ... array of files]
 								callback();
 							});
 						}
