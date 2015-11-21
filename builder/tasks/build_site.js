@@ -361,8 +361,9 @@ module.exports = function(grunt) {
 					}
 					var _path = m[1];
 					var page_path = false;
-
+					grunt.log.writeln("resolving >> "+_path);
 					var _resoled = resolve_path(_path);
+					grunt.log.writeln("resolved << << "+_resoled);
 					if( false !== _resoled){
 						content = content.split('{% include "'+_path+'" -%}').join('{% include "'+_resoled+'" -%}');
 					}
