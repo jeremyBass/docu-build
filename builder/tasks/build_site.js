@@ -202,12 +202,13 @@ module.exports = function(grunt) {
 						var re = /(?:{#\s+?\n?\r?)((?:^.*?\n?\r?)+)(?:\s+?\n?\r?#})/gmi;
 						var m;
 						var data_block = {};
-						console.log(content);
+						//console.log(content);
 						while ((m = re.exec(content)) !== null) {
 							if ( m.index === re.lastIndex ) {
 								re.lastIndex++;
 							}
 							var _page_meta = m[1];
+							console.log(_page_meta);
 							try {
 								data_block = JSON.parse(_page_meta);
 							}
