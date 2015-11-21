@@ -215,13 +215,15 @@ module.exports = function(grunt) {
 							}
 
 						}
-						if( "undefined" === typeof data_block[file_name].title){
-							data_block[file_name]["title"] = file_name.split('-').join(" ");
+						if( "undefined" !== typeof data_block){
+							if( "undefined" === typeof data_block[file_name].title){
+								data_block[file_name]["title"] = file_name.split('-').join(" ");
+							}
+							data_block[file_name]["vars"]={
+								"showstuff":true
+							};
+							sitemap.pages[file_name] = extend(true,data_block[file_name],sitemap.pages[file_name]);
 						}
-						data_block[file_name]["vars"]={
-							"showstuff":true
-						};
-						sitemap.pages[file_name] = extend(true,data_block[file_name],sitemap.pages[file_name]);
 					}
 				}
 			})
