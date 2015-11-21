@@ -245,7 +245,7 @@ module.exports = function(grunt) {
 
 					var linkTitle = "";
 					if( "undefined" !== typeof sitemap.pages[page_key].title  ){
-						sitemap.pages[page_key].title;
+						linkTitle = sitemap.pages[page_key].title;
 					}
 					if( "undefined" !== typeof sitemap.pages[page_key].nav_title  ){
 						linkTitle = sitemap.pages[page_key].nav_title;
@@ -259,8 +259,11 @@ module.exports = function(grunt) {
 					if( "undefined" !== typeof sitemap.pages[page_key].child_nav ){
 						var r = tmpobj[linkTitle];
 						var navarray = {};
-
-						var mainlink= sitemap.pages[page_key].title;
+						
+						var mainlink= "";
+						if( "undefined" !== typeof sitemap.pages[page_key].title  ){
+							mainlink= sitemap.pages[page_key].title;
+						}
 						if( "undefined" !== sitemap.pages[page_key].nav_title ){
 							mainlink = sitemap.pages[page_key].nav_title;
 						}
