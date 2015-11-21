@@ -116,12 +116,12 @@ module.exports = function(grunt) {
 			"template":"main.tmpl",
 		};
 		
-		if( undefined === typeof sitemap.page_defaults.content_folders  ){
+		if( "undefined" === typeof sitemap.page_defaults.content_folders  ){
 			sitemap.page_defaults.content_folders = {};
 		}
 		for (var item in content_folders){
 			//grunt.log.writeln("looking for --------------->> "+item);
-			if( undefined === typeof sitemap.page_defaults.content_folders[item] ){
+			if( "undefined" === typeof sitemap.page_defaults.content_folders[item] ){
 				sitemap.page_defaults.content_folders[item] = content_folders[item];
 			}
 		}
@@ -215,7 +215,7 @@ module.exports = function(grunt) {
 							}
 
 						}
-						if( undefined === typeof data_block[file_name].title){
+						if( "undefined" === typeof data_block[file_name].title){
 							data_block[file_name]["title"] = file_name.split('-').join(" ");
 						}
 						data_block[file_name]["vars"]={
@@ -242,24 +242,24 @@ module.exports = function(grunt) {
 					var root = sitemap.pages[page_key].nav_root.replace(new RegExp("[\/]+$", "g"), "");
 
 					var linkTitle = "";
-					if( undefined !== typeof sitemap.pages[page_key].title  ){
+					if( "undefined" !== typeof sitemap.pages[page_key].title  ){
 						sitemap.pages[page_key].title;
 					}
-					if( undefined !== typeof sitemap.pages[page_key].nav_title  ){
+					if( "undefined" !== typeof sitemap.pages[page_key].nav_title  ){
 						linkTitle = sitemap.pages[page_key].nav_title;
 					}
 
-					if( undefined !== typeof sitemap.pages[page_key].nav_link ){
+					if( "undefined" !== typeof sitemap.pages[page_key].nav_link ){
 						tmpobj[linkTitle]=sitemap.pages[page_key].nav_link;
 					}else{
 						tmpobj[linkTitle]= root+'/'+sitemap.pages[page_key].nav_key+".html";
 					}
-					if( undefined !== typeof sitemap.pages[page_key].child_nav ){
+					if( "undefined" !== typeof sitemap.pages[page_key].child_nav ){
 						var r = tmpobj[linkTitle];
 						var navarray = {};
 
 						var mainlink= sitemap.pages[page_key].title;
-						if( undefined !== sitemap.pages[page_key].nav_title ){
+						if( "undefined" !== sitemap.pages[page_key].nav_title ){
 							mainlink = sitemap.pages[page_key].nav_title;
 						}
 						navarray[mainlink] = r;
