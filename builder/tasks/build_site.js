@@ -151,6 +151,7 @@ module.exports = function(grunt) {
 		function create_structure(){
 			fsx.removeSync('./build');
 			wrench.mkdirSyncRecursive('../site/'+folders.assests, 0777);
+			wrench.mkdirSyncRecursive('./build/src', 0777);
 			//wrench.mkdirSyncRecursive('./build/src', 0777);
 			fsx.copy(require('path').resolve('../src'), require('path').resolve('./build/src'), {"clobber" :true}, function (err) {
 				if (err) grunt.log.writeln(err);
