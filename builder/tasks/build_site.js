@@ -191,7 +191,7 @@ module.exports = function(grunt) {
 					fsx.copy('./builder/'+folders.templates+folders.assests, '../site/'+folders.assests, {"clobber" :true}, function (err) {
 						if (err) return grunt.log.writeln(err);
 						var custom_src = path.join(__dirname, './build/src/'+folders.assests);
-						if( !fs.statSync(custom_src).isDirectory() ){
+						if( !fs.existsSync(custom_src) || !fs.statSync(custom_src).isDirectory() ){
 							grunt.log.writeln('ON END OF create_structure ./build/src/'+folders.assests+'==========~~~~~~~~~~~~~~++++++++++'); 
 							//grunt.log.writeln(items); // => [ ... array of files]
 							callback();
