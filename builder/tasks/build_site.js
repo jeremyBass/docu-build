@@ -217,6 +217,7 @@ module.exports = function(grunt) {
 							}
 
 						}
+						console.log("json parsing -- ON "+file_name+"---------------/////");
 						console.log(data_block);
 						if( 0 < data_block.length ){
 							if( "undefined" === typeof data_block.title){
@@ -226,11 +227,14 @@ module.exports = function(grunt) {
 								"showstuff":true
 							};
 							sitemap.pages[file_name] = extend(true,data_block,sitemap.pages[file_name]);
+							console.log("added to sitemap.pages[file_name] on "+file_name+"---------------/////");
 						}
 					}
 				}
 			})
 			.on('end', function () {
+				console.log("Starting page parsing -----------------/////");
+				console.log(sitemap);
 				for (var page_key in sitemap.pages) {
 					//apply defaults were needed
 					sitemap.pages[page_key].nav_key = page_key;
