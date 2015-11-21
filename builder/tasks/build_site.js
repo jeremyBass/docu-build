@@ -233,7 +233,8 @@ module.exports = function(grunt) {
 			catch (err) {
 				pages = './builder/'+folders.templates+folders.pages;
 			}
-
+			console.log("START build_site_obj ======================>");
+			console.log(pages);
 			fsx.walk(pages)
 			.on('readable', function () {
 				var item;
@@ -266,6 +267,7 @@ module.exports = function(grunt) {
 							"showstuff":true
 						};
 						sitemap.pages[file_name] = extend(true,data_block[file_name],sitemap.pages[file_name]);
+						console.log("<<-=====track==========================");
 						console.log(file_name+"<<-===============================");
 						console.log(sitemap.pages[file_name]);
 					}
