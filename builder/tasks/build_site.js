@@ -202,6 +202,7 @@ module.exports = function(grunt) {
 						var re = /(?:{#\s+?\n?\r?)((?:^.*?\n?\r?)+)(?:\s+?\n?\r?#})/gmi;
 						var m;
 						var data_block = {};
+						console.log(content);
 						while ((m = re.exec(content)) !== null) {
 							if ( m.index === re.lastIndex ) {
 								re.lastIndex++;
@@ -215,6 +216,7 @@ module.exports = function(grunt) {
 							}
 
 						}
+						console.log(data_block);
 						if( 0 < data_block.length ){
 							if( "undefined" === typeof data_block.title){
 								data_block["title"] = file_name.split('-').join(" ");
