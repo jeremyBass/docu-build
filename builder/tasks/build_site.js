@@ -182,6 +182,7 @@ module.exports = function(grunt) {
 		function build_site_obj(callback){
 			var nav = {};
 			var pages = path.resolve('./build/src/'+folders.pages);
+			console.log(pages+"<<<<<<<<<<<<<< looking to");
 			try {
 				if( !fs.statSync(_pages).isDirectory() ){
 					pages = path.resolve('./builder/'+folders.templates+folders.pages);
@@ -191,6 +192,7 @@ module.exports = function(grunt) {
 				//console.log(err);
 				pages = path.resolve('./builder/'+folders.templates+folders.pages);
 			}
+			console.log(pages+">>>>>>>>>>>>>>> went with ////////////");
 			fsx.walk(pages)
 			.on('readable', function () {
 				var item;
