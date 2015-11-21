@@ -196,9 +196,9 @@ module.exports = function(grunt) {
 		 */
 		function build_site_obj(callback){
 			var nav = {};
-			var pages = path.join(__dirname, 'builder/'+folders.templates+folders.pages)
+			var pages = path.join(__dirname, './builder/'+folders.templates+folders.pages)
 			try {
-				var _pages = path.join(__dirname, 'build/src/'+folders.pages);
+				var _pages = path.join(__dirname, './build/src/'+folders.pages);
 				if( !fs.statSync(_pages).isDirectory() ){
 					pages = _pages
 				}
