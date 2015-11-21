@@ -148,7 +148,7 @@ module.exports = function(grunt) {
 		/*
 		 * set up folders and defaults
 		 */
-		function create_structure(){
+		function create_structure(callback){
 			fsx.removeSync('./build');
 			wrench.mkdirSyncRecursive('../site/'+folders.assests, 0777);
 			wrench.mkdirSyncRecursive('./build/src', 0777);
@@ -183,41 +183,43 @@ module.exports = function(grunt) {
 			})
 			.on('end', function () {
 				grunt.log.writeln(items); // => [ ... array of files]
-			});
+			
 
 
-			//do defaults first
-			fsx.copy('./builder/'+folders.templates+folders.assests, '../site/'+folders.assests, {"clobber" :true}, function (err) {
-				if (err) return grunt.log.writeln(err);
+				//do defaults first
+				fsx.copy('./builder/'+folders.templates+folders.assests, '../site/'+folders.assests, {"clobber" :true}, function (err) {
+					if (err) return grunt.log.writeln(err);
 
-				var items = []; // files, directories, symlinks, etc
-				fsx.walk('./build/src/'+folders.assests)
-				.on('readable', function () {
-					var item;
-					while ((item = this.read())) {
-						var _path = (item.path).split('\\src\\'+(folders.assests.split("/").join("\\"))).join("\\site\\"+folders.assests.split("/").join("\\"));
-						try {
-							if(fs.statSync(_path).isFile()){
-								//fsx.removeSync(_path);
-								fsx.copy(item.path, _path, function (err) {
-									if (err) return grunt.log.writeln(err);
-								});
-								items.push(_path);
+					var items = []; // files, directories, symlinks, etc
+					fsx.walk('./build/src/'+folders.assests)
+					.on('readable', function () {
+						var item;
+						while ((item = this.read())) {
+							var _path = (item.path).split('\\src\\'+(folders.assests.split("/").join("\\"))).join("\\site\\"+folders.assests.split("/").join("\\"));
+							try {
+								if(fs.statSync(_path).isFile()){
+									//fsx.removeSync(_path);
+									fsx.copy(item.path, _path, function (err) {
+										if (err) return grunt.log.writeln(err);
+									});
+									items.push(_path);
+								}
+							}
+							catch (err) {
+								grunt.log.writeln(err);
 							}
 						}
-						catch (err) {
-							grunt.log.writeln(err);
-						}
-					}
-				})
-				.on('end', function () {
-					grunt.log.writeln(items); // => [ ... array of files]
-				});
+					})
+					.on('end', function () {
+						grunt.log.writeln(items); // => [ ... array of files]
+						callback();
+					});
 
-			}); 
+				}); 
+			});
 
 		}
-		create_structure();
+		
 
 		/*
 		 * This will apply defaults and build the nav
@@ -385,7 +387,8 @@ module.exports = function(grunt) {
 				});
 			}
 		}
-		build_site_obj(build_page);
+		
+		create_structure( function(){return build_site_obj(build_page);} );
 
 		grunt.task.current.async();
 	});
