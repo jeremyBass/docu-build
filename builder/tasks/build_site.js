@@ -165,7 +165,7 @@ module.exports = function(grunt) {
 					}else{
 						// we have done the defaults and know there is a 
 						// src assests folder so we do the overrides now
-						fsx.walk( path.resolve('./build/src/'+folders.assests) )
+						fsx.walk( custom_src )
 						.on('readable', function () {
 							while ((item = this.read())) {
 								var _path = (item.path).split('\\src\\'+(folders.assests.split("/").join("\\"))).join("\\site\\"+folders.assests.split("/").join("\\"));
@@ -179,6 +179,7 @@ module.exports = function(grunt) {
 								}
 								catch (err) {
 									grunt.log.writeln(err);
+									grunt.log.writeln(_path + " <<< was aiming for")
 								}
 							}
 						})
