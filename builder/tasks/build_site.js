@@ -261,7 +261,7 @@ module.exports = function(grunt) {
 						linkTitle = sitemap.pages[page_key].nav_title;
 					}
 
-					if( "undefined" !== typeof sitemap.pages[page_key].nav_link ){
+					if( "undefined" !== typeof sitemap.pages[page_key].nav_link && "" !== sitemap.pages[page_key].nav_link ){
 						tmpobj[linkTitle] = sitemap.pages[page_key].nav_link;
 					}else{
 						tmpobj[linkTitle] = root+'/'+sitemap.pages[page_key].nav_key+".html";
