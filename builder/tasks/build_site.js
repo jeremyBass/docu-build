@@ -132,7 +132,7 @@ module.exports = function(grunt) {
 		 */
 		function resolve_path(relative_path,tested){
 			tested = tested||false;
-			var _path = "./src/" + relative_path;
+			var _path = "./build/src/" + relative_path;
 			if( true === tested ){
 				_path = "./builder/" + folders.templates +""+ relative_path;
 			}
@@ -152,7 +152,7 @@ module.exports = function(grunt) {
 			fsx.removeSync('./build');
 			wrench.mkdirSyncRecursive('../site/'+folders.assests, 0777);
 			//wrench.mkdirSyncRecursive('./build/src', 0777);
-			fsx.copy(require('path').resolve('../src'), require('path').resolve('./build/src'), {"clobber" :true}, function (err) {
+			fsx.copy(require('path').resolve('../src'), require('path').resolve('./build/src'), function (err) {
 				if (err) grunt.log.writeln(err);
 			});
 			grunt.log.writeln('-------------where ../src/ is -----------');
@@ -223,7 +223,7 @@ module.exports = function(grunt) {
 		 */
 		function build_site_obj(callback){
 			var nav = {};
-			var pages = '../src/'+folders.pages;
+			var pages = './build/src/'+folders.pages;
 			try {
 				if( !fs.statSync(pages).isDirectory() ){
 					pages = './builder/'+folders.templates+folders.pages;
