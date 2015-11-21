@@ -190,32 +190,38 @@ module.exports = function(grunt) {
 					//do defaults first
 					fsx.copy('./builder/'+folders.templates+folders.assests, '../site/'+folders.assests, {"clobber" :true}, function (err) {
 						if (err) return grunt.log.writeln(err);
-
-						var items = []; // files, directories, symlinks, etc
-						fsx.walk(path.join(__dirname, './build/src/'+folders.assests))
-						.on('readable', function () {
-							var item;
-							while ((item = this.read())) {
-								var _path = (item.path).split('\\src\\'+(folders.assests.split("/").join("\\"))).join("\\site\\"+folders.assests.split("/").join("\\"));
-								try {
-									if(fs.statSync(_path).isFile()){
-										//fsx.removeSync(_path);
-										fsx.copy(item.path, _path, function (err) {
-											if (err) return grunt.log.writeln(err);
-										});
-										items.push(_path);
+						var custom_src = path.join(__dirname, './build/src/'+folders.assests);
+						if( !fs.statSync(custom_src).isDirectory() ){
+							grunt.log.writeln('ON END OF create_structure ./build/src/'+folders.assests+'==========~~~~~~~~~~~~~~++++++++++'); 
+							//grunt.log.writeln(items); // => [ ... array of files]
+							callback();
+						}else{
+							var items = []; // files, directories, symlinks, etc
+							fsx.walk()
+							.on('readable', function () {
+								var item;
+								while ((item = this.read())) {
+									var _path = (item.path).split('\\src\\'+(folders.assests.split("/").join("\\"))).join("\\site\\"+folders.assests.split("/").join("\\"));
+									try {
+										if(fs.statSync(_path).isFile()){
+											//fsx.removeSync(_path);
+											fsx.copy(item.path, _path, function (err) {
+												if (err) return grunt.log.writeln(err);
+											});
+											items.push(_path);
+										}
+									}
+									catch (err) {
+										grunt.log.writeln(err);
 									}
 								}
-								catch (err) {
-									grunt.log.writeln(err);
-								}
-							}
-						})
-						.on('end', function () {
-							grunt.log.writeln('ON END OF create_structure ==========~~~~~~~~~~~~~~++++++++++'); 
-							grunt.log.writeln(items); // => [ ... array of files]
-							callback();
-						});
+							})
+							.on('end', function () {
+								grunt.log.writeln('ON END OF create_structure ==========~~~~~~~~~~~~~~++++++++++'); 
+								grunt.log.writeln(items); // => [ ... array of files]
+								callback();
+							});
+						}
 
 					}); 
 				});
