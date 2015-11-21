@@ -54,12 +54,13 @@ module.exports = function(grunt) {
 			util = require('util');
 		//clear all of the site first thing and start fresh
 		fsx.removeSync('../site');
-
+		fsx.removeSync('./build');
+		
 		//read the setting and load as an object
 		var sitemap_path = '../src/sitemap.json';
 		var sitemap = {};
 		try {
-			if(fs.statSync(sitemap_path).isFile()){
+			if( fs.statSync(sitemap_path).isFile() ){
 				sitemap = grunt.file.readJSON(sitemap_path);
 			}
 		}
@@ -114,10 +115,9 @@ module.exports = function(grunt) {
 			"templates":"templates/",
 			"template":"main.tmpl",
 		};
-		if( undefined === sitemap.page_defaults.content_folders ){
-			sitemap.page_defaults.content_folders = {};
-			//grunt.log.writeln("didn't have <------sitemap.page_defaults.content_folders");
-		}
+
+		sitemap.page_defaults.content_folders = sitemap.page_defaults.content_folders || {};
+
 		for (var item in content_folders){
 			//grunt.log.writeln("looking for --------------->> "+item);
 			if( undefined === sitemap.page_defaults.content_folders[item] ){
@@ -132,7 +132,7 @@ module.exports = function(grunt) {
 		 * set up folders and file paths based on the sitemap with fallbacks to the builder template folder
 		 */
 		function resolve_path(relative_path,tested){
-			tested = tested||false;
+			tested = tested || false;
 			var _path = "./build/src/" + relative_path;
 			if( true === tested ){
 				_path = "./builder/" + folders.templates +""+ relative_path;
@@ -149,81 +149,44 @@ module.exports = function(grunt) {
 		 * set up folders and defaults
 		 */
 		function create_structure(callback){
-			fsx.removeSync('./build');
 			wrench.mkdirSyncRecursive('../site/'+folders.assests, 0777);
 			wrench.mkdirSyncRecursive('./build/src', 0777);
 			//wrench.mkdirSyncRecursive('./build/src', 0777);
 			fsx.copy( path.resolve('../src'), path.resolve('./build/src'), function (err) {
 				if (err) grunt.log.writeln(err);
 
-				//grunt.log.writeln('-------------where ../src/ is -----------');
-				//grunt.log.writeln(path.resolve('../src/'));
-				//grunt.log.writeln('-------------where ../src/ is -----------');
-				//grunt.log.writeln('-------------where ./build/src/ is -----------');
-				//grunt.log.writeln(path.resolve('./build/src/'));
-				//grunt.log.writeln('-------------where ./build/src/ is -----------');
-				var items = [];
-				/*fsx.walk(path.resolve('../src/'))
-				.on('readable', function () {
-					var item;
-					while ((item = this.read())) {
-						var _path = (item.path).split('\\src\\').join("\\docu\\build\\src\\");
-						grunt.log.writeln("<< from >> "+item.path);
-						grunt.log.writeln("<< TO   << "+ _path);
-						try {
-							fsx.copy(item.path, _path, function (err) {
-								if (err) grunt.log.writeln(err);
-							});
-							items.push(_path);
-						}
-						catch (err) {
-							grunt.log.writeln(err);
-						}
-					}
-				})
-				.on('end', function () {*/
-					//grunt.log.writeln(items); // => [ ... array of files]
-					//grunt.log.writeln("on end src"); 
-					//grunt.log.writeln('./builder/'+folders.templates+folders.assests); 
-					//grunt.log.writeln(path.join(__dirname, 'builder/'+folders.templates+folders.assests)); 
-					//do defaults first
-					fsx.copy('./builder/'+folders.templates+folders.assests, '../site/'+folders.assests, {"clobber" :true}, function (err) {
-						if (err) return grunt.log.writeln(err);
-						var custom_src = path.join(__dirname, './build/src/'+folders.assests);
-						if( !fs.existsSync(custom_src) || !fs.statSync(custom_src).isDirectory() ){
-							//grunt.log.writeln('ON END OF create_structure ./build/src/'+folders.assests+'==========~~~~~~~~~~~~~~++++++++++'); 
-							//grunt.log.writeln(items); // => [ ... array of files]
-							callback();
-						}else{
-							var items = []; // files, directories, symlinks, etc
-							fsx.walk(path.join(__dirname, 'build/src/'+folders.assests))
-							.on('readable', function () {
-								var item;
-								while ((item = this.read())) {
-									var _path = (item.path).split('\\src\\'+(folders.assests.split("/").join("\\"))).join("\\site\\"+folders.assests.split("/").join("\\"));
-									try {
-										if(fs.statSync(_path).isFile()){
-											//fsx.removeSync(_path);
-											fsx.copy(item.path, _path, function (err) {
-												if (err) return grunt.log.writeln(err);
-											});
-											items.push(_path);
-										}
-									}
-									catch (err) {
-										grunt.log.writeln(err);
+				//do defaults first
+				fsx.copy( path.resolve('./builder/'+folders.templates+folders.assests), path.resolve('../site/'+folders.assests), {"clobber" :true}, function (err) {
+					if (err) return grunt.log.writeln(err);
+					var custom_src = path.join(__dirname, './build/src/'+folders.assests);
+					if( !fs.existsSync(custom_src) || !fs.statSync(custom_src).isDirectory() ){
+						// we don't need to do anything if the src is not there
+						callback();
+					}else{
+						// we have done the defaults and know there is a 
+						// src assests folder so we do the overrides now
+						fsx.walk(path.join(__dirname, 'build/src/'+folders.assests))
+						.on('readable', function () {
+							while ((item = this.read())) {
+								var _path = (item.path).split('\\src\\'+(folders.assests.split("/").join("\\"))).join("\\site\\"+folders.assests.split("/").join("\\"));
+								try {
+									if( fs.statSync(_path).isFile() ){
+										fsx.removeSync(_path);
+										fsx.copy(item.path, _path, function (err) {
+											if (err) return grunt.log.writeln(err);
+										});
 									}
 								}
-							})
-							.on('end', function () {
-								//grunt.log.writeln('ON END OF create_structure ==========~~~~~~~~~~~~~~++++++++++'); 
-								//grunt.log.writeln(items); // => [ ... array of files]
-								callback();
-							});
-						}
-
-					}); 
-				//});
+								catch (err) {
+									grunt.log.writeln(err);
+								}
+							}
+						})
+						.on('end', function () {
+							callback();
+						});
+					}
+				});
 			});
 		}
 		
@@ -233,23 +196,21 @@ module.exports = function(grunt) {
 		 */
 		function build_site_obj(callback){
 			var nav = {};
-			var pages = path.join(__dirname, '../../build/src/'+folders.pages);
-			console.log("src is trying for ======================>" + pages);
+			var pages = path.join(__dirname, 'builder/'+folders.templates+folders.pages)
 			try {
-				if( !fs.statSync(pages).isDirectory() ){
-					pages = './builder/'+folders.templates+folders.pages;
+				var _pages = path.join(__dirname, 'build/src/'+folders.pages);
+				if( !fs.statSync(_pages).isDirectory() ){
+					pages = _pages
 				}
 			}
 			catch (err) {
-				pages = './builder/'+folders.templates+folders.pages;
+				//console.log(err);
+				// we don't really need to state that we couldn't find the src pages
 			}
-			console.log("START build_site_obj ======================>");
-			console.log(pages);
 			fsx.walk(pages)
 			.on('readable', function () {
 				var item;
 				while ((item = this.read())) {
-
 					if( !fs.statSync(item.path).isDirectory() ){
 						var content = fs.readFileSync(item.path);
 						var file_name = item.path.split('\\').pop().split('.')[0];
@@ -257,7 +218,7 @@ module.exports = function(grunt) {
 						var m;
 						var data_block = {};
 						while ((m = re.exec(content)) !== null) {
-							if (m.index === re.lastIndex) {
+							if ( m.index === re.lastIndex ) {
 								re.lastIndex++;
 							}
 							var _page_meta = m[1];
@@ -265,36 +226,28 @@ module.exports = function(grunt) {
 								data_block = JSON.parse(_page_meta);
 							}
 							catch (err) {
-								console.log("FILE ->> "+ item.path);
 								console.log(err);
 							}
 
 						}
 						if( undefined === data_block.title){
-							data_block.title = file_name.split('-').join(" ");
+							data_block[file_name].title = file_name.split('-').join(" ");
 						}
-						data_block["vars"]={
+						data_block[file_name].vars={
 							"showstuff":true
 						};
 						sitemap.pages[file_name] = extend(true,data_block[file_name],sitemap.pages[file_name]);
-						console.log("<<-=====track==========================");
-						console.log(file_name+"<<-===============================");
-						console.log(sitemap.pages[file_name]);
 					}
-
 				}
 			})
 			.on('end', function () {
-				//console.log(sitemap); // => [ ... array of files]
 				for (var page_key in sitemap.pages) {
-					grunt.log.writeln("working "+page_key);
-
 					//apply defaults were needed
 					sitemap.pages[page_key].nav_key = page_key;
-					//note extend will not work here, for some reason it'll alter the ref of defaults
-					//we'll have to do it by hand for the moment
+					// note extend will not work here, for some reason it'll alter the ref of defaults
+					// we'll have to do it by hand for the moment
 					for (var objKey in defaults){
-						if(typeof sitemap.pages[page_key][objKey] === "undefined"){
+						if( undefined ===  sitemap.pages[page_key][objKey] ){
 							sitemap.pages[page_key][objKey] = defaults[objKey];
 						}
 					}
@@ -304,28 +257,28 @@ module.exports = function(grunt) {
 					var root = sitemap.pages[page_key].nav_root.replace(new RegExp("[\/]+$", "g"), "");
 
 					var linkTitle = sitemap.pages[page_key].title;
-					if(typeof sitemap.pages[page_key].nav_title !== "undefined" ){
+					if( undefined !== sitemap.pages[page_key].nav_title  ){
 						linkTitle = sitemap.pages[page_key].nav_title;
 					}
 
-					if(typeof sitemap.pages[page_key].nav_link !== "undefined" ){
+					if( undefined !== sitemap.pages[page_key].nav_link ){
 						tmpobj[linkTitle]=sitemap.pages[page_key].nav_link;
 					}else{
 						tmpobj[linkTitle]= root+'/'+sitemap.pages[page_key].nav_key+".html";
 					}
-					if(typeof sitemap.pages[page_key].child_nav !== "undefined"){
+					if( undefined !== sitemap.pages[page_key].child_nav ){
 						var r = tmpobj[linkTitle];
 						var navarray = {};
 
 						var mainlink= sitemap.pages[page_key].title;
-						if(typeof sitemap.pages[page_key].nav_title !== "undefined" ){
+						if( undefined !== sitemap.pages[page_key].nav_title ){
 							mainlink = sitemap.pages[page_key].nav_title;
 						}
 						navarray[mainlink] = r;
 						for (var link in sitemap.pages[page_key].child_nav){
 							var url = link;
 							var title = sitemap.pages[page_key].child_nav[link];
-							if(link.indexOf('#')==0){
+							if( 0 == link.indexOf('#') ){
 								url=r+link;
 							}
 							navarray[title] = url;
@@ -333,7 +286,7 @@ module.exports = function(grunt) {
 						tmpobj[linkTitle]=navarray;
 					}
 					nav = extend(true,tmpobj,nav);
-					grunt.log.writeln("worked "+page_key);
+					//grunt.log.writeln("worked "+page_key);
 				}
 				sitemap.nav = nav;
 
@@ -363,14 +316,14 @@ module.exports = function(grunt) {
 				var targetFile = page_obj.folder_root+page;
 				var content = fs.readFileSync(sourceFile,'utf8');
 
-				if(content.indexOf('"+current_build+"')>0){
+				if( 0 < content.indexOf('"+current_build+"') ){
 					content = content.split('"+current_build+"').join(page_obj.nav_key);
 				}
 				//check for the need to use a fall back if it exists
 				var re = /(?:{% include ")(.*?)(?:" -%})/gmi;
 				var m;
 				while ((m = re.exec(content)) !== null) {
-					if (m.index === re.lastIndex) {
+					if ( m.index === re.lastIndex ) {
 						re.lastIndex++;
 					}
 					var _path = m[1];
