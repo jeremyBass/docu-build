@@ -165,25 +165,8 @@ module.exports = function(grunt) {
 					}else{
 						// we have done the defaults and know there is a 
 						// src assests folder so we do the overrides now
-						fsx.walk( custom_src )
-						.on('readable', function () {
-							while ((item = this.read())) {
-								var _path = (item.path).split('\\src\\'+(folders.assests.split("/").join("\\"))).join("\\site\\"+folders.assests.split("/").join("\\"));
-								try {
-									if( fs.statSync(_path).isFile() ){
-										fsx.removeSync(_path);
-										fsx.copy(item.path, _path, function (err) {
-											if (err) return grunt.log.writeln(err);
-										});
-									}
-								}
-								catch (err) {
-									grunt.log.writeln(err);
-									grunt.log.writeln(_path + " <<< was aiming for")
-								}
-							}
-						})
-						.on('end', function () {
+						fsx.copy( custom_src, path.resolve('../site/'+folders.assests), {"clobber" :true}, function (err) {
+							if (err) return grunt.log.writeln(err);
 							callback();
 						});
 					}
