@@ -154,72 +154,72 @@ module.exports = function(grunt) {
 			wrench.mkdirSyncRecursive('../site/'+folders.assests, 0777);
 			wrench.mkdirSyncRecursive('./build/src', 0777);
 			//wrench.mkdirSyncRecursive('./build/src', 0777);
-			fsx.copy( path.resolve('../src'), path.resolve('./build/src'), {"clobber" :true}, function (err) {
+			fsx.copy( path.resolve('../src'), path.resolve('./build/src'), function (err) {
 				if (err) grunt.log.writeln(err);
-			});
-			grunt.log.writeln('-------------where ../src/ is -----------');
-			grunt.log.writeln(require('path').resolve('../src/'));
-			grunt.log.writeln('-------------where ../src/ is -----------');
-			grunt.log.writeln('-------------where ./build/src/ is -----------');
-			grunt.log.writeln(require('path').resolve('./build/src/'));
-			grunt.log.writeln('-------------where ./build/src/ is -----------');
-			var items = [];
-			fsx.walk(path.resolve('../src/'))
-			.on('readable', function () {
-				var item;
-				while ((item = this.read())) {
-					var _path = (item.path).split('\\src\\').join("\\docu\\build\\src\\");
-					grunt.log.writeln("<< from >> "+item.path);
-					grunt.log.writeln("<< TO   << "+ _path);
-					try {
-						fsx.copy(item.path, _path, function (err) {
-							if (err) grunt.log.writeln(err);
-						});
-						items.push(_path);
-					}
-					catch (err) {
-						grunt.log.writeln(err);
-					}
-				}
-			})
-			.on('end', function () {
-				grunt.log.writeln(items); // => [ ... array of files]
-				grunt.log.writeln("on end src"); 
-				grunt.log.writeln('./builder/'+folders.templates+folders.assests); 
-				grunt.log.writeln(path.join(__dirname, 'builder/'+folders.templates+folders.assests)); 
-				//do defaults first
-				fsx.copy('./builder/'+folders.templates+folders.assests, '../site/'+folders.assests, {"clobber" :true}, function (err) {
-					if (err) return grunt.log.writeln(err);
 
-					var items = []; // files, directories, symlinks, etc
-					fsx.walk('./build/src/'+folders.assests)
-					.on('readable', function () {
-						var item;
-						while ((item = this.read())) {
-							var _path = (item.path).split('\\src\\'+(folders.assests.split("/").join("\\"))).join("\\site\\"+folders.assests.split("/").join("\\"));
-							try {
-								if(fs.statSync(_path).isFile()){
-									//fsx.removeSync(_path);
-									fsx.copy(item.path, _path, function (err) {
-										if (err) return grunt.log.writeln(err);
-									});
-									items.push(_path);
+				grunt.log.writeln('-------------where ../src/ is -----------');
+				grunt.log.writeln(path.resolve('../src/'));
+				grunt.log.writeln('-------------where ../src/ is -----------');
+				grunt.log.writeln('-------------where ./build/src/ is -----------');
+				grunt.log.writeln(path.resolve('./build/src/'));
+				grunt.log.writeln('-------------where ./build/src/ is -----------');
+				var items = [];
+				fsx.walk(path.resolve('../src/'))
+				.on('readable', function () {
+					var item;
+					while ((item = this.read())) {
+						var _path = (item.path).split('\\src\\').join("\\docu\\build\\src\\");
+						grunt.log.writeln("<< from >> "+item.path);
+						grunt.log.writeln("<< TO   << "+ _path);
+						try {
+							fsx.copy(item.path, _path, function (err) {
+								if (err) grunt.log.writeln(err);
+							});
+							items.push(_path);
+						}
+						catch (err) {
+							grunt.log.writeln(err);
+						}
+					}
+				})
+				.on('end', function () {
+					grunt.log.writeln(items); // => [ ... array of files]
+					grunt.log.writeln("on end src"); 
+					grunt.log.writeln('./builder/'+folders.templates+folders.assests); 
+					grunt.log.writeln(path.join(__dirname, 'builder/'+folders.templates+folders.assests)); 
+					//do defaults first
+					fsx.copy('./builder/'+folders.templates+folders.assests, '../site/'+folders.assests, {"clobber" :true}, function (err) {
+						if (err) return grunt.log.writeln(err);
+
+						var items = []; // files, directories, symlinks, etc
+						fsx.walk('./build/src/'+folders.assests)
+						.on('readable', function () {
+							var item;
+							while ((item = this.read())) {
+								var _path = (item.path).split('\\src\\'+(folders.assests.split("/").join("\\"))).join("\\site\\"+folders.assests.split("/").join("\\"));
+								try {
+									if(fs.statSync(_path).isFile()){
+										//fsx.removeSync(_path);
+										fsx.copy(item.path, _path, function (err) {
+											if (err) return grunt.log.writeln(err);
+										});
+										items.push(_path);
+									}
+								}
+								catch (err) {
+									grunt.log.writeln(err);
 								}
 							}
-							catch (err) {
-								grunt.log.writeln(err);
-							}
-						}
-					})
-					.on('end', function () {
-						grunt.log.writeln('./builder/'+folders.templates+folders.assests); 
-						grunt.log.writeln(items); // => [ ... array of files]
-						callback();
-					});
+						})
+						.on('end', function () {
+							grunt.log.writeln('./builder/'+folders.templates+folders.assests); 
+							grunt.log.writeln(items); // => [ ... array of files]
+							callback();
+						});
 
-				}); 
+					}); 
+				});
 			});
-
 		}
 		
 
