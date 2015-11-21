@@ -138,8 +138,7 @@ module.exports = function(grunt) {
 				_path = "./builder/" + folders.templates +""+ relative_path;
 			}
 			try {
-				var pass_test = fs.existsSync(_path) && (fs.statSync(_path).isFile()||fs.statSync(_path).isDirectory());
-				return pass_test ? _path : (tested ? false : resolve_path(relative_path,true));
+				return fs.existsSync(_path)  ? _path : (tested ? false : resolve_path(relative_path,true));
 			}
 			catch (err) {
 				return tested ? false : resolve_path(relative_path,true);
