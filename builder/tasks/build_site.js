@@ -184,7 +184,7 @@ module.exports = function(grunt) {
 			})
 			.on('end', function () {
 				grunt.log.writeln(items); // => [ ... array of files]
-			
+				grunt.log.writeln("on end src"); 
 
 
 				//do defaults first
@@ -212,6 +212,7 @@ module.exports = function(grunt) {
 						}
 					})
 					.on('end', function () {
+						grunt.log.writeln('./builder/'+folders.templates+folders.assests); 
 						grunt.log.writeln(items); // => [ ... array of files]
 						callback();
 					});
