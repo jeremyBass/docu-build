@@ -251,7 +251,8 @@ module.exports = function(grunt) {
 					//build nav
 					var tmpobj={};
 					var root = sitemap.pages[page_key].nav_root.replace(new RegExp("[\/]+$", "g"), "");
-
+					var page_key = sitemap.pages[page_key].name;
+					
 					var linkTitle = "";
 					if( "undefined" !== typeof sitemap.pages[page_key].title  ){
 						linkTitle = sitemap.pages[page_key].title;
@@ -261,9 +262,9 @@ module.exports = function(grunt) {
 					}
 
 					if( "undefined" !== typeof sitemap.pages[page_key].nav_link ){
-						tmpobj[linkTitle]=sitemap.pages[page_key].nav_link;
+						tmpobj[linkTitle] = sitemap.pages[page_key].nav_link;
 					}else{
-						tmpobj[linkTitle]= root+'/'+sitemap.pages[page_key].nav_key+".html";
+						tmpobj[linkTitle] = root+'/'+sitemap.pages[page_key].nav_key+".html";
 					}
 					if( "undefined" !== typeof sitemap.pages[page_key].child_nav ){
 						var r = tmpobj[linkTitle];
@@ -281,7 +282,7 @@ module.exports = function(grunt) {
 							var url = link;
 							var title = sitemap.pages[page_key].child_nav[link];
 							if( 0 == link.indexOf('#') ){
-								url=r+link;
+								url=r+url;
 							}
 							navarray[title] = url;
 						}
