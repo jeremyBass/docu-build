@@ -115,9 +115,10 @@ module.exports = function(grunt) {
 			"templates":"templates/",
 			"template":"main.tmpl",
 		};
-
-		sitemap.page_defaults.content_folders = sitemap.page_defaults.content_folders || {};
-
+		
+		if( undefined === typeof sitemap.page_defaults.content_folders  ){
+			sitemap.page_defaults.content_folders = {};
+		}
 		for (var item in content_folders){
 			//grunt.log.writeln("looking for --------------->> "+item);
 			if( undefined === typeof sitemap.page_defaults.content_folders[item] ){
