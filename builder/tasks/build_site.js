@@ -185,8 +185,8 @@ module.exports = function(grunt) {
 			.on('end', function () {
 				grunt.log.writeln(items); // => [ ... array of files]
 				grunt.log.writeln("on end src"); 
-
-
+				grunt.log.writeln('./builder/'+folders.templates+folders.assests); 
+				grunt.log.writeln(path.join(__dirname, 'builder/'+folders.templates+folders.assests)); 
 				//do defaults first
 				fsx.copy('./builder/'+folders.templates+folders.assests, '../site/'+folders.assests, {"clobber" :true}, function (err) {
 					if (err) return grunt.log.writeln(err);
