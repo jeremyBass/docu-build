@@ -120,7 +120,7 @@ module.exports = function(grunt) {
 
 		for (var item in content_folders){
 			//grunt.log.writeln("looking for --------------->> "+item);
-			if( undefined === sitemap.page_defaults.content_folders[item] ){
+			if( undefined === typeof sitemap.page_defaults.content_folders[item] ){
 				sitemap.page_defaults.content_folders[item] = content_folders[item];
 			}
 		}
@@ -214,7 +214,7 @@ module.exports = function(grunt) {
 							}
 
 						}
-						if( undefined === data_block.title){
+						if( undefined === typeof data_block[file_name].title){
 							data_block[file_name]["title"] = file_name.split('-').join(" ");
 						}
 						data_block[file_name]["vars"]={
@@ -240,17 +240,20 @@ module.exports = function(grunt) {
 					var tmpobj={};
 					var root = sitemap.pages[page_key].nav_root.replace(new RegExp("[\/]+$", "g"), "");
 
-					var linkTitle = sitemap.pages[page_key].title;
-					if( undefined !== sitemap.pages[page_key].nav_title  ){
+					var linkTitle = "";
+					if( undefined !== typeof sitemap.pages[page_key].title  ){
+						sitemap.pages[page_key].title;
+					}
+					if( undefined !== typeof sitemap.pages[page_key].nav_title  ){
 						linkTitle = sitemap.pages[page_key].nav_title;
 					}
 
-					if( undefined !== sitemap.pages[page_key].nav_link ){
+					if( undefined !== typeof sitemap.pages[page_key].nav_link ){
 						tmpobj[linkTitle]=sitemap.pages[page_key].nav_link;
 					}else{
 						tmpobj[linkTitle]= root+'/'+sitemap.pages[page_key].nav_key+".html";
 					}
-					if( undefined !== sitemap.pages[page_key].child_nav ){
+					if( undefined !== typeof sitemap.pages[page_key].child_nav ){
 						var r = tmpobj[linkTitle];
 						var navarray = {};
 
