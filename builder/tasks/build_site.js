@@ -331,7 +331,7 @@ module.exports = function(grunt) {
 				}
 				sitemap.nav = nav;
 
-				callback();
+				build_pages();
 			});
 		}
 
@@ -341,7 +341,7 @@ module.exports = function(grunt) {
 		/*
 		 * Construct the static pages
 		 */
-		function build_page(){
+		function build_pages(){
 			console.log(sitemap);
 			for (var key in sitemap.pages) {
 
@@ -390,7 +390,7 @@ module.exports = function(grunt) {
 			}
 		}
 		
-		create_structure( function(){return build_site_obj(build_page);} );
+		create_structure(build_site_obj);
 
 		grunt.task.current.async();
 	});
