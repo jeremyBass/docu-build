@@ -265,7 +265,8 @@ module.exports = function(grunt) {
 							"showstuff":true
 						};
 						sitemap.pages[file_name] = extend(true,data_block[file_name],sitemap.pages[file_name]);
-						//grunt.log.writeln(sitemap);
+						console.log(file_name+"<<-===============================");
+						console.log(sitemap.pages[file_name]);
 					}
 
 				}
