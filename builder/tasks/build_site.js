@@ -332,9 +332,9 @@ module.exports = function(grunt) {
 					}
 					var _path = m[1];
 					var page_path = false;
-					grunt.log.writeln("resolving >> "+_path);
+					//grunt.log.writeln("resolving >> "+_path);
 					var _resoled = resolve_path(_path);
-					grunt.log.writeln("resolved << << "+_resoled);
+					//grunt.log.writeln("resolved << << "+_resoled);
 					if( false !== _resoled){
 						content = content.split('{% include "'+_path+'" -%}').join('{% include "'+_resoled+'" -%}');
 					}
@@ -342,7 +342,7 @@ module.exports = function(grunt) {
 
 				site_obj.current_page=page;
 				site_obj.current_build=page_obj.nav_key;
-				grunt.log.writeln("building "+targetFile);
+				//grunt.log.writeln("building "+targetFile);
 				var tmpl = new nunjucks.Template(content,env);
 				grunt.log.writeln(targetFile + " compiled");
 				var res = tmpl.render(site_obj);
