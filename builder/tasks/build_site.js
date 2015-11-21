@@ -184,7 +184,7 @@ module.exports = function(grunt) {
 			var pages = path.resolve('./build/src/'+folders.pages);
 			console.log(pages+"<<<<<<<<<<<<<< looking to");
 			try {
-				if( !fs.statSync(_pages).isDirectory() ){
+				if( !fs.statSync(pages).isDirectory() ){
 					pages = path.resolve('./builder/'+folders.templates+folders.pages);
 				}
 			}
