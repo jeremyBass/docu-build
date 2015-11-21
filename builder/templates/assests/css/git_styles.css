@@ -180,3 +180,31 @@ h2[id^="repo"][id*="github"] a:before {
 	background:#903737;
 }
 
+@-webkit-keyframes fadeIt {
+  0%   { background-color: transparent; }
+  25%  { background-color: #FFD187; }
+  100% { background-color: transparent; }
+}
+@-moz-keyframes fadeIt {
+  0%   { background-color: transparent; }
+  25%  { background-color: #FFD187; }
+  100% { background-color: transparent; }
+}
+@-o-keyframes fadeIt {
+  0%   { background-color: transparent; }
+  25%  { background-color: #FFD187; }
+  100% { background-color: transparent; }
+}
+@keyframes fadeIt {
+  0%   { background-color: transparent; }
+  25%  { background-color: #FFD187; }
+  100% { background-color: transparent; }
+}
+
+.backgroundAnimated{    
+    background-image:none !important;
+    -webkit-animation: fadeIt 5s ease-in-out; 
+       -moz-animation: fadeIt 5s ease-in-out; 
+         -o-animation: fadeIt 5s ease-in-out; 
+            animation: fadeIt 5s ease-in-out; 
+}

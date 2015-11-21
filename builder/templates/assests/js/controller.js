@@ -15,6 +15,12 @@
 	}
 
 $(document).ready(function(){
+	
+	if(window.location.href.indexOf('#')>0){
+		var hash = window.location.href.split('#')[0];
+		$('#'+hash).addClass('backgroundAnimated');
+	}
+	
 	// simple auto anchoring setup
 	$.each($('h1,h2,h3,h4,h5,h6'),function(){
 		var element = $(this);
