@@ -9,6 +9,7 @@ module.exports = function(grunt) {
 
 
 
+
 		function cmd_exec(cmd, args, cb_stdout, cb_end) {
 			var spawn = require('child_process').spawn,
 				child = spawn(cmd, args),
@@ -153,7 +154,7 @@ module.exports = function(grunt) {
 			wrench.mkdirSyncRecursive('../site/'+folders.assests, 0777);
 			wrench.mkdirSyncRecursive('./build/src', 0777);
 			//wrench.mkdirSyncRecursive('./build/src', 0777);
-			fsx.copy(require('path').resolve('../src'), require('path').resolve('./build/src'), {"clobber" :true}, function (err) {
+			fsx.copy( path.resolve('../src'), path.resolve('./build/src'), {"clobber" :true}, function (err) {
 				if (err) grunt.log.writeln(err);
 			});
 			grunt.log.writeln('-------------where ../src/ is -----------');
@@ -163,7 +164,7 @@ module.exports = function(grunt) {
 			grunt.log.writeln(require('path').resolve('./build/src/'));
 			grunt.log.writeln('-------------where ./build/src/ is -----------');
 			var items = [];
-			fsx.walk(require('path').resolve('../src/'))
+			fsx.walk(path.resolve('../src/'))
 			.on('readable', function () {
 				var item;
 				while ((item = this.read())) {
@@ -226,7 +227,8 @@ module.exports = function(grunt) {
 		 */
 		function build_site_obj(callback){
 			var nav = {};
-			var pages = './build/src/'+folders.pages;
+			var pages = path.join(__dirname, '../../build/src/'+folders.pages);
+			console.log("src is trying for ======================>" + pages);
 			try {
 				if( !fs.statSync(pages).isDirectory() ){
 					pages = './builder/'+folders.templates+folders.pages;
