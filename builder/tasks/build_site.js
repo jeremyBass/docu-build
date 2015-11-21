@@ -138,10 +138,10 @@ module.exports = function(grunt) {
 				_path = "./builder/" + folders.templates +""+ relative_path;
 			}
 			try {
-				return fs.existsSync(_path)  ? _path : (tested ? false : resolve_path(relative_path,true));
+				return fs.existsSync(_path) ? _path : ( tested ? false : resolve_path(relative_path, true) );
 			}
 			catch (err) {
-				return tested ? false : resolve_path(relative_path,true);
+				return tested ? false : resolve_path(relative_path, true);
 			}
 		}
 
@@ -156,12 +156,12 @@ module.exports = function(grunt) {
 			fsx.copy( path.resolve('../src'), path.resolve('./build/src'), function (err) {
 				if (err) grunt.log.writeln(err);
 
-				grunt.log.writeln('-------------where ../src/ is -----------');
-				grunt.log.writeln(path.resolve('../src/'));
-				grunt.log.writeln('-------------where ../src/ is -----------');
-				grunt.log.writeln('-------------where ./build/src/ is -----------');
-				grunt.log.writeln(path.resolve('./build/src/'));
-				grunt.log.writeln('-------------where ./build/src/ is -----------');
+				//grunt.log.writeln('-------------where ../src/ is -----------');
+				//grunt.log.writeln(path.resolve('../src/'));
+				//grunt.log.writeln('-------------where ../src/ is -----------');
+				//grunt.log.writeln('-------------where ./build/src/ is -----------');
+				//grunt.log.writeln(path.resolve('./build/src/'));
+				//grunt.log.writeln('-------------where ./build/src/ is -----------');
 				var items = [];
 				fsx.walk(path.resolve('../src/'))
 				.on('readable', function () {
@@ -196,7 +196,7 @@ module.exports = function(grunt) {
 							callback();
 						}else{
 							var items = []; // files, directories, symlinks, etc
-							fsx.walk()
+							fsx.walk(path.join(__dirname, 'build/src/'+folders.assests))
 							.on('readable', function () {
 								var item;
 								while ((item = this.read())) {
