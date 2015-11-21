@@ -197,7 +197,7 @@ module.exports = function(grunt) {
 						var _path = (item.path).split('\\src\\'+(folders.assests.split("/").join("\\"))).join("\\site\\"+folders.assests.split("/").join("\\"));
 						try {
 							if(fs.statSync(_path).isFile()){
-								fsx.removeSync(_path);
+								//fsx.removeSync(_path);
 								fsx.copy(item.path, _path, function (err) {
 									if (err) return grunt.log.writeln(err);
 								});
