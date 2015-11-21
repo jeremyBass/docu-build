@@ -215,9 +215,9 @@ module.exports = function(grunt) {
 
 						}
 						if( undefined === data_block.title){
-							data_block[file_name].title = file_name.split('-').join(" ");
+							data_block[file_name]["title"] = file_name.split('-').join(" ");
 						}
-						data_block[file_name].vars={
+						data_block[file_name]["vars"]={
 							"showstuff":true
 						};
 						sitemap.pages[file_name] = extend(true,data_block[file_name],sitemap.pages[file_name]);
