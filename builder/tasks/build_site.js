@@ -216,7 +216,11 @@ module.exports = function(grunt) {
 								data_block = JSON.parse(_page_meta);
 							}
 							catch (err) {
+								console.log('/*-- JSON PARSE ERROR --%%%%%%%%%%-*/');
 								console.log(err);
+								console.log('/*-- try validating this at http://jsonlint.com/ -*/');
+								console.log(_page_meta);
+								console.log('/*-- --%%%%%%%%%%%%%%%%%%-*/');
 							}
 
 						}
