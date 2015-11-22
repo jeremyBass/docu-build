@@ -118,7 +118,7 @@ h2[id^="repo"][id*="github"] a:before {
     -ms-transition: all .2s ease-in-out;
 	transition: all .2s ease-in-out;
 
-	z-index:999999;
+	z-index:9;
 	display:block;
 	position:relative;
 	cursor:zoom-in;
@@ -153,6 +153,7 @@ h2[id^="repo"][id*="github"] a:before {
     height: auto;
     border: 1px solid #494949;
     background: #fff;
+	z-index:999999;
 }
 .transition:not(.closed):before {
 	display: inline-block;
