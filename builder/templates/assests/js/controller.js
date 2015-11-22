@@ -16,6 +16,7 @@
 
 $(document).ready(function(){
 	
+
 	if(window.location.href.indexOf('#')>0){
 		var hash = window.location.href.split('#')[1];
 		$('#'+hash).addClass('backgroundAnimated');
@@ -63,4 +64,5 @@ $(document).ready(function(){
 			$(this).addClass('closed');
 		}
 	});
+	$('.column aside').Stickyfill();
 });
