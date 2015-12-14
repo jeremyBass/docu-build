@@ -16,6 +16,7 @@ git config --global alias.docuroot '!f() { cd ./$(git rev-parse --show-cdup); };
 git config --global alias.docuinit '!f() { git submodule add https://github.com/jeremyBass/docu-build.git docu; git docuupdate; cd docu; npm install; git checkout master; cd ../; git branch --set-upstream-to=origin/gh-pages gh-pages;}; f'
 git config --global alias.docuupdate '!f() { git docuroot; git submodule init; git submodule update --remote; cd docu; git checkout master; git pull; npm install; cd ../; }; f'
 git config --global alias.docudraft '!f() { git docuroot; git docuupdate; cd docu; grunt build -site; cd ../; }; f'
-git config --global alias.docupublish '!f() { git docudraft; git add . -A; git commit -m "$1"; git push; }; f'
+git config --global alias.docupublish '!f() { git docudraft; git add . -A; git commit -m \"$1\"; git push; }; f'
+
 ```
 
