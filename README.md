@@ -13,9 +13,9 @@ To get started with the `docu build` github page builder, you first need to make
 Command lines to add git aliases (**NOTE** this will be *global*, if you wish to not have this global remove the ` --global` flag )
 ```bash
 git config --global alias.docuroot '!f() { cd ./$(git rev-parse --show-cdup); }; f'
-git config --global alias.docuinit '!f() { git submodule add https://github.com/jeremyBass/docu-build.git docu; git docuupdate; cd docu; npm install; git checkout master; cd ../;}; f'
+git config --global alias.docuinit '!f() { git submodule add https://github.com/jeremyBass/docu-build.git docu; git docuupdate; cd docu; npm install; git checkout master; cd ../; git branch --set-upstream-to=origin/gh-pages gh-pages;}; f'
 git config --global alias.docuupdate '!f() { git docuroot; git submodule init; git submodule update --remote; cd docu; git checkout master; git pull; npm install; cd ../; }; f'
 git config --global alias.docudraft '!f() { git docuroot; git docuupdate; cd docu; grunt build -site; cd ../; }; f'
-git config --global alias.docupublish '!f() { git docudraft; git add -A; git commit -m "$1"; git push; }; f'
+git config --global alias.docupublish '!f() { git docudraft; git add . -A; git commit -m "$1"; git push; }; f'
 ```
 
